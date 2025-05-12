@@ -50,19 +50,10 @@
       background-color: white;
     }
     
-    /* Fixed width/height image with text backup */
     .restaurant-header img {
       width: 240px;
       height: auto;
       max-width: 90%;
-    }
-    
-    /* Add a text backup in case image fails */
-    .restaurant-header .text-backup {
-      display: none;
-      font-size: 24px;
-      font-weight: 600;
-      color: #333;
     }
     
     .thank-you-message {
@@ -96,15 +87,9 @@
 <body>
   <div class="container">
     <div class="main-box">
-      <!-- Restaurant Header with multiple fallbacks -->
+      <!-- Restaurant Header with S3 hosted image URL -->
       <div class="restaurant-header">
-        <!-- Try multiple paths with different fallbacks -->
-        <img 
-          src="/bawarchi.png" 
-          alt="Bawarchi Restaurant" 
-          onerror="this.onerror=null; this.src='bawarchi.png'; if(this.naturalWidth === 0) { this.src='./bawarchi.png'; }"
-        >
-        <span class="text-backup">Bawarchi Restaurant</span>
+        <img src="https://restaurant-review-logos.s3.us-east-1.amazonaws.com/bawarchi.png" alt="Bawarchi Restaurant">
       </div>
       
       <!-- Thank You Message -->
@@ -121,17 +106,6 @@
   </div>
 
   <script>
-    // Check if the image failed to load and show text backup
-    window.addEventListener('load', function() {
-      const img = document.querySelector('.restaurant-header img');
-      const textBackup = document.querySelector('.restaurant-header .text-backup');
-      
-      if (img.naturalWidth === 0) {
-        img.style.display = 'none';
-        textBackup.style.display = 'block';
-      }
-    });
-    
     document.addEventListener('DOMContentLoaded', async () => {
       try {
         await Clerk.load();
@@ -191,7 +165,7 @@
           <div class="container">
             <div class="main-box">
               <div class="restaurant-header">
-                <span>Bawarchi Restaurant</span>
+                <img src="https://restaurant-review-logos.s3.us-east-1.amazonaws.com/bawarchi.png" alt="Bawarchi Restaurant">
               </div>
               <div class="thank-you-message">
                 <p>Thanks for having the meal at Bawarchi Restaurant</p>
