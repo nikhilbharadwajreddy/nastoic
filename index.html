@@ -12,9 +12,6 @@
     data-clerk-publishable-key="pk_live_Y2xlcmsubmFzdG9pYy5jb20k"
     defer
   ></script>
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
     * {
@@ -22,50 +19,103 @@
       padding: 0;
       box-sizing: border-box;
     }
+    
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f9f9f9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f5f5f7;
+      color: #1d1d1f;
+      line-height: 1.47059;
+      font-weight: 400;
+      letter-spacing: -0.022em;
     }
-    .formbold-main-wrapper {
+    
+    .apple-container {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 48px;
+      padding: 20px;
       min-height: 100vh;
     }
-    .formbold-form-wrapper {
-      margin: 0 auto;
-      max-width: 570px;
+    
+    .apple-card {
+      max-width: 420px;
       width: 100%;
-      background: white;
-      padding: 40px;
-      border-radius: 8px;
-      box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      padding: 40px 30px;
+      transition: all 0.3s ease;
     }
-    .formbold-form-title {
-      margin-bottom: 30px;
+    
+    .apple-logo {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    
+    .apple-logo h1 {
+      font-size: 27px;
+      font-weight: 500;
+      letter-spacing: -0.05em;
+      color: #1d1d1f;
+    }
+    
+    .apple-title {
+      margin-bottom: 24px;
       text-align: center;
     }
-    .formbold-form-title h2 {
-      font-weight: 600;
-      font-size: 28px;
-      line-height: 34px;
-      color: #07074d;
+    
+    .apple-title h2 {
+      font-weight: 500;
+      font-size: 21px;
+      letter-spacing: -0.022em;
+      color: #1d1d1f;
+      margin-bottom: 6px;
     }
-    .formbold-form-title p {
-      font-size: 16px;
-      line-height: 24px;
-      color: #536387;
-      margin-top: 12px;
+    
+    .apple-title p {
+      font-size: 14px;
+      color: #86868b;
+      margin-top: 8px;
+    }
+    
+    .apple-button {
+      display: inline-block;
+      background: #0071e3;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 400;
+      text-align: center;
+      border-radius: 980px;
+      padding: 8px 16px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-width: 28px;
+      min-height: 28px;
+    }
+    
+    .apple-button:hover {
+      background: #0077ED;
+    }
+    
+    @media (max-width: 480px) {
+      .apple-card {
+        border-radius: 14px;
+        padding: 30px 20px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="formbold-main-wrapper">
-    <div class="formbold-form-wrapper">
-      <div class="formbold-form-title">
-        <h2>Welcome to Nastoic</h2>
-        <p>Please sign in to continue to your profile</p>
+  <div class="apple-container">
+    <div class="apple-card">
+      <div class="apple-logo">
+        <h1>Nastoic</h1>
+      </div>
+      
+      <div class="apple-title">
+        <h2>Sign in with your account</h2>
+        <p>Continue to access your profile</p>
       </div>
       
       <div id="clerk-container"></div>
@@ -75,10 +125,8 @@
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       try {
-        // Initialize Clerk
         await Clerk.load();
 
-        // If not signed in, mount the SignIn widget
         if (!Clerk.user) {
           Clerk.mountSignIn(
             document.getElementById('clerk-container'),
@@ -94,6 +142,31 @@
                     border: 'none',
                     boxShadow: 'none',
                     width: '100%'
+                  },
+                  formButtonPrimary: {
+                    backgroundColor: '#0071e3',
+                    borderRadius: '980px',
+                    fontWeight: '400',
+                    fontSize: '14px',
+                    padding: '8px 16px'
+                  },
+                  formFieldInput: {
+                    border: '1px solid #d2d2d7',
+                    borderRadius: '8px',
+                    padding: '12px 16px',
+                    fontSize: '14px'
+                  },
+                  formFieldLabel: {
+                    fontSize: '14px',
+                    color: '#1d1d1f'
+                  },
+                  footerActionText: {
+                    fontSize: '12px',
+                    color: '#86868b'
+                  },
+                  footerActionLink: {
+                    color: '#0071e3',
+                    fontSize: '12px'
                   }
                 }
               }
@@ -102,14 +175,16 @@
           return;
         }
 
-        // If already signed in, go straight to profile page
         window.location.href = '/profile.html';
       } catch (error) {
         console.error('Error initializing Clerk:', error);
         document.body.innerHTML = `
-          <div class="formbold-main-wrapper">
-            <div class="formbold-form-wrapper">
-              <div class="formbold-form-title">
+          <div class="apple-container">
+            <div class="apple-card">
+              <div class="apple-logo">
+                <h1>Nastoic</h1>
+              </div>
+              <div class="apple-title">
                 <h2>Error Loading Login</h2>
                 <p>There was a problem loading the login page. Please refresh or try again later.</p>
               </div>
