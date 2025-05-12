@@ -50,10 +50,19 @@
       background-color: white;
     }
     
+    /* Fixed width/height image with text backup */
     .restaurant-header img {
       width: 240px;
       height: auto;
       max-width: 90%;
+    }
+    
+    /* Add a text backup in case image fails */
+    .restaurant-header .text-backup {
+      display: none;
+      font-size: 24px;
+      font-weight: 600;
+      color: #333;
     }
     
     .thank-you-message {
@@ -82,53 +91,20 @@
       width: 85%;
       max-width: 360px;
     }
-    
-    /* Pre-loading style to prevent flicker */
-    .header-image {
-      max-width: 90%;
-      width: 240px;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-    }
-    
-    /* Fixed height container to prevent layout shift */
-    .restaurant-header {
-      min-height: 80px;
-    }
-    
-    /* Make sure Clerk card is centered */
-    .cl-rootBox {
-      display: flex !important;
-      justify-content: center !important;
-      width: 100% !important;
-    }
-    
-    .cl-card {
-      width: 100% !important;
-      max-width: 360px !important;
-      margin: 0 auto !important;
-    }
-    
-    /* Override some Clerk styles to match the screenshot */
-    :root {
-      --clerk-footer-text-color: #6c757d !important;
-      --clerk-color-primary: #1677ff !important;
-    }
-    
-    /* Center "Secured by Clerk" text */
-    .cl-footer {
-      justify-content: center !important;
-      padding: 14px 0 !important;
-    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="main-box">
-      <!-- Restaurant Header with preloaded image -->
+      <!-- Restaurant Header with multiple fallbacks -->
       <div class="restaurant-header">
-        <img src="/bawarchi.png" alt="Bawarchi Restaurant" class="header-image" onerror="this.onerror=null; this.src='bawarchi.png';">
+        <!-- Try multiple paths with different fallbacks -->
+        <img 
+          src="/bawarchi.png" 
+          alt="Bawarchi Restaurant" 
+          onerror="this.onerror=null; this.src='bawarchi.png'; if(this.naturalWidth === 0) { this.src='./bawarchi.png'; }"
+        >
+        <span class="text-backup">Bawarchi Restaurant</span>
       </div>
       
       <!-- Thank You Message -->
@@ -145,25 +121,19 @@
   </div>
 
   <script>
-    // Create a preloaded image to ensure it's in the browser cache
-    const preloadImage = new Image();
-    preloadImage.src = '/bawarchi.png';
-    
-    // Fallback if the absolute path doesn't work
-    preloadImage.onerror = function() {
-      preloadImage.src = 'bawarchi.png';
-    };
+    // Check if the image failed to load and show text backup
+    window.addEventListener('load', function() {
+      const img = document.querySelector('.restaurant-header img');
+      const textBackup = document.querySelector('.restaurant-header .text-backup');
+      
+      if (img.naturalWidth === 0) {
+        img.style.display = 'none';
+        textBackup.style.display = 'block';
+      }
+    });
     
     document.addEventListener('DOMContentLoaded', async () => {
       try {
-        // Wait for image to be loaded before initializing Clerk
-        if (!preloadImage.complete) {
-          await new Promise(resolve => {
-            preloadImage.onload = resolve;
-            preloadImage.onerror = resolve; // Continue even if image fails
-          });
-        }
-        
         await Clerk.load();
 
         if (!Clerk.user) {
@@ -175,8 +145,7 @@
                 layout: {
                   socialButtonsPlacement: "top",
                   socialButtonsVariant: "iconButton",
-                  showOptionalFields: false,
-                  logoPlacement: "none" // Don't use logo in Clerk to avoid conflict
+                  showOptionalFields: false
                 },
                 elements: {
                   rootBox: {
@@ -207,65 +176,6 @@
                     margin: "6px 0 16px",
                     color: "#6c757d",
                     content: "Welcome back! Please sign in to continue"
-                  },
-                  formButtonPrimary: {
-                    backgroundColor: "#1677ff",
-                    fontSize: "15px",
-                    borderRadius: "50px",
-                    fontWeight: "500",
-                    padding: "10px",
-                    border: "none"
-                  },
-                  formFieldInput: {
-                    border: "1px solid #ced4da",
-                    borderRadius: "8px",
-                    fontSize: "15px",
-                    padding: "10px 14px"
-                  },
-                  formFieldLabel: {
-                    fontSize: "15px",
-                    color: "#212529",
-                    marginBottom: "5px"
-                  },
-                  footer: {
-                    display: "flex",
-                    justifyContent: "center",
-                    fontSize: "14px"
-                  },
-                  footerActionLink: {
-                    color: "#1677ff",
-                    fontSize: "14px"
-                  },
-                  dividerText: {
-                    color: "#6c757d",
-                    fontSize: "13px",
-                    content: "or"
-                  },
-                  dividerLine: {
-                    backgroundColor: "#e9ecef"
-                  },
-                  socialButtonsIconButton: {
-                    boxShadow: "0 0 0 1px rgba(0, 0, 0, 0.05)",
-                    borderRadius: "8px",
-                    width: "38px",
-                    height: "38px"
-                  },
-                  socialButtonsBlockButton: {
-                    boxShadow: "0 0 0 1px rgba(0, 0, 0, 0.05)",
-                    borderRadius: "8px",
-                    justifyContent: "center"
-                  },
-                  socialButtonsProviderIcon: {
-                    width: "18px",
-                    height: "18px"
-                  },
-                  main: {
-                    gap: "20px",
-                    width: "100%"
-                  },
-                  identityPreview: {
-                    margin: "0 0 16px 0",
-                    width: "100%"
                   }
                 }
               }
@@ -281,7 +191,7 @@
           <div class="container">
             <div class="main-box">
               <div class="restaurant-header">
-                <img src="/bawarchi.png" alt="Bawarchi Restaurant" onerror="this.onerror=null; this.src='bawarchi.png';">
+                <span>Bawarchi Restaurant</span>
               </div>
               <div class="thank-you-message">
                 <p>Thanks for having the meal at Bawarchi Restaurant</p>
