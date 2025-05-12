@@ -30,7 +30,7 @@
     
     .container {
       width: 100%;
-      max-width: 480px;
+      max-width: 460px;
       margin: 15px auto;
       padding: 0;
     }
@@ -74,13 +74,27 @@
     .clerk-outer-container {
       display: flex;
       justify-content: center;
-      padding: 20px 0;
+      padding: 16px 0;
       background-color: white;
     }
     
     #clerk-container {
-      width: 90%;
-      max-width: 400px;
+      width: 85%;
+      max-width: 360px;
+    }
+    
+    /* Pre-loading style to prevent flicker */
+    .header-image {
+      max-width: 90%;
+      width: 240px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    
+    /* Fixed height container to prevent layout shift */
+    .restaurant-header {
+      min-height: 80px;
     }
     
     /* Make sure Clerk card is centered */
@@ -92,7 +106,7 @@
     
     .cl-card {
       width: 100% !important;
-      max-width: 400px !important;
+      max-width: 360px !important;
       margin: 0 auto !important;
     }
     
@@ -105,16 +119,16 @@
     /* Center "Secured by Clerk" text */
     .cl-footer {
       justify-content: center !important;
-      padding: 16px 0 !important;
+      padding: 14px 0 !important;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="main-box">
-      <!-- Restaurant Header -->
+      <!-- Restaurant Header with preloaded image -->
       <div class="restaurant-header">
-        <img src="bawarchi.png" alt="Bawarchi Restaurant">
+        <img src="/bawarchi.png" alt="Bawarchi Restaurant" class="header-image" onerror="this.onerror=null; this.src='bawarchi.png';">
       </div>
       
       <!-- Thank You Message -->
@@ -131,8 +145,25 @@
   </div>
 
   <script>
+    // Create a preloaded image to ensure it's in the browser cache
+    const preloadImage = new Image();
+    preloadImage.src = '/bawarchi.png';
+    
+    // Fallback if the absolute path doesn't work
+    preloadImage.onerror = function() {
+      preloadImage.src = 'bawarchi.png';
+    };
+    
     document.addEventListener('DOMContentLoaded', async () => {
       try {
+        // Wait for image to be loaded before initializing Clerk
+        if (!preloadImage.complete) {
+          await new Promise(resolve => {
+            preloadImage.onload = resolve;
+            preloadImage.onerror = resolve; // Continue even if image fails
+          });
+        }
+        
         await Clerk.load();
 
         if (!Clerk.user) {
@@ -145,15 +176,9 @@
                   socialButtonsPlacement: "top",
                   socialButtonsVariant: "iconButton",
                   showOptionalFields: false,
-                  logoImageUrl: "bawarchi.png",
-                  logoPlacement: "inside"
+                  logoPlacement: "none" // Don't use logo in Clerk to avoid conflict
                 },
                 elements: {
-                  logoImage: {
-                    width: "110px",
-                    height: "auto",
-                    margin: "0 auto 16px"
-                  },
                   rootBox: {
                     width: "100%",
                     margin: "0 auto"
@@ -165,10 +190,10 @@
                     maxWidth: "100%",
                     borderRadius: "12px",
                     margin: "0 auto",
-                    padding: "24px 20px"
+                    padding: "20px 16px"
                   },
                   headerTitle: {
-                    fontSize: "22px",
+                    fontSize: "20px",
                     fontWeight: "600",
                     textAlign: "center",
                     margin: "0",
@@ -176,42 +201,44 @@
                     content: "Sign in to Review Now"
                   },
                   headerSubtitle: {
-                    fontSize: "16px",
+                    fontSize: "15px",
                     fontWeight: "400",
                     textAlign: "center",
-                    margin: "8px 0 20px",
+                    margin: "6px 0 16px",
                     color: "#6c757d",
                     content: "Welcome back! Please sign in to continue"
                   },
                   formButtonPrimary: {
                     backgroundColor: "#1677ff",
-                    fontSize: "16px",
+                    fontSize: "15px",
                     borderRadius: "50px",
                     fontWeight: "500",
-                    padding: "12px",
+                    padding: "10px",
                     border: "none"
                   },
                   formFieldInput: {
                     border: "1px solid #ced4da",
                     borderRadius: "8px",
-                    fontSize: "16px",
-                    padding: "12px 16px"
+                    fontSize: "15px",
+                    padding: "10px 14px"
                   },
                   formFieldLabel: {
-                    fontSize: "16px",
+                    fontSize: "15px",
                     color: "#212529",
-                    marginBottom: "6px"
+                    marginBottom: "5px"
                   },
                   footer: {
                     display: "flex",
-                    justifyContent: "center"
+                    justifyContent: "center",
+                    fontSize: "14px"
                   },
                   footerActionLink: {
-                    color: "#1677ff"
+                    color: "#1677ff",
+                    fontSize: "14px"
                   },
                   dividerText: {
                     color: "#6c757d",
-                    fontSize: "14px",
+                    fontSize: "13px",
                     content: "or"
                   },
                   dividerLine: {
@@ -219,7 +246,9 @@
                   },
                   socialButtonsIconButton: {
                     boxShadow: "0 0 0 1px rgba(0, 0, 0, 0.05)",
-                    borderRadius: "8px"
+                    borderRadius: "8px",
+                    width: "38px",
+                    height: "38px"
                   },
                   socialButtonsBlockButton: {
                     boxShadow: "0 0 0 1px rgba(0, 0, 0, 0.05)",
@@ -227,15 +256,15 @@
                     justifyContent: "center"
                   },
                   socialButtonsProviderIcon: {
-                    width: "20px",
-                    height: "20px"
+                    width: "18px",
+                    height: "18px"
                   },
                   main: {
-                    gap: "24px",
+                    gap: "20px",
                     width: "100%"
                   },
                   identityPreview: {
-                    margin: "0 0 20px 0",
+                    margin: "0 0 16px 0",
                     width: "100%"
                   }
                 }
@@ -252,7 +281,7 @@
           <div class="container">
             <div class="main-box">
               <div class="restaurant-header">
-                <img src="bawarchi.png" alt="Bawarchi Restaurant">
+                <img src="/bawarchi.png" alt="Bawarchi Restaurant" onerror="this.onerror=null; this.src='bawarchi.png';">
               </div>
               <div class="thank-you-message">
                 <p>Thanks for having the meal at Bawarchi Restaurant</p>
