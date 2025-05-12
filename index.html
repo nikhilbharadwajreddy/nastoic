@@ -22,7 +22,7 @@
     }
     
     body {
-      background-color: #f8f9fa;
+      background-color: #f0f2f5;
       color: #212529;
       line-height: 1.5;
       font-weight: 400;
@@ -31,82 +31,62 @@
     .container {
       width: 100%;
       max-width: 500px;
-      margin: 20px auto 0;
-      padding: 0 10px; /* Added padding to prevent elements from touching screen edges */
+      margin: 15px auto;
+      padding: 0;
     }
     
     .main-box {
       background: white;
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
       overflow: hidden;
-      /* Added a max-width to ensure content stays within bounds */
-      max-width: 100%;
     }
     
     .restaurant-header {
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 24px 0;
+      padding: 20px 0;
       background-color: white;
     }
     
     .restaurant-header img {
       width: 240px;
       height: auto;
-      max-width: 90%; /* Reduced to prevent overflow */
+      max-width: 90%;
     }
     
     .thank-you-message {
-      background-color: #f8f9fa;
+      background-color: #f5f7fa;
       text-align: center;
-      padding: 16px;
-      border-top: 1px solid #f1f1f1;
-      border-bottom: 1px solid #f1f1f1;
+      padding: 20px;
+      border-top: 1px solid #ebedf0;
+      border-bottom: 1px solid #ebedf0;
     }
     
     .thank-you-message p {
-      font-size: 17px;
-      font-weight: 400;
+      font-size: 19px;
+      font-weight: 500;
       color: #212529;
-      letter-spacing: -0.01em;
+      line-height: 1.4;
     }
     
-    /* Clerk container - fixed to contain all content */
+    .clerk-outer-container {
+      padding: 20px;
+      background-color: white;
+    }
+    
     #clerk-container {
-      padding: 20px 15px; /* Reduced horizontal padding */
       width: 100%;
-      max-width: 100%;
-      overflow: hidden; /* Ensure nothing extends outside */
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
     }
     
-    /* Force all Clerk elements to stay within bounds */
-    .cl-rootBox, .cl-card, .cl-main {
-      width: 100% !important;
-      max-width: 100% !important;
-      overflow: hidden !important;
-    }
-    
-    /* Hide Clerk logo */
-    .cl-logo {
-      display: none !important;
-    }
-    
-    /* Hide footer */
-    .cl-footer {
-      display: none !important;
-    }
-    
-    /* Hide tabs */
-    .cl-tabs {
-      display: none !important;
-    }
-    
-    /* Ensure social buttons don't overflow */
-    .cl-socialButtonsIconButton {
-      max-width: 40px !important;
-      margin: 0 6px !important;
+    /* Override some Clerk styles to match the screenshot */
+    :root {
+      --clerk-footer-text-color: #6c757d !important;
+      --clerk-color-primary: #1677ff !important;
     }
   </style>
 </head>
@@ -123,8 +103,11 @@
         <p>Thanks for having the meal at Bawarchi Restaurant</p>
       </div>
       
-      <!-- Clerk Sign In Container -->
-      <div id="clerk-container"></div>
+      <!-- Clerk Outer Container -->
+      <div class="clerk-outer-container">
+        <!-- Clerk Sign In Container -->
+        <div id="clerk-container"></div>
+      </div>
     </div>
   </div>
 
@@ -140,110 +123,69 @@
               afterSignInUrl: '/profile.html',
               appearance: {
                 layout: {
-                  helpPageUrl: null,
-                  logoPlacement: "none",
-                  privacyPageUrl: null,
-                  showOptionalFields: false,
                   socialButtonsPlacement: "top",
                   socialButtonsVariant: "iconButton",
-                  termsPageUrl: null
-                },
-                variables: {
-                  borderRadius: "8px",
-                  colorAlphaShade: "#f9fafb",
-                  colorBackground: "#ffffff",
-                  colorDanger: "#ef4444",
-                  colorInputBackground: "#ffffff",
-                  colorInputText: "#333333",
-                  colorPrimary: "#1677FF",
-                  colorShade: "#f1f5f9",
-                  colorSuccess: "#10b981",
-                  colorText: "#333333",
-                  colorTextOnPrimaryBackground: "#ffffff",
-                  colorTextSecondary: "#666666",
-                  fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-                  fontSize: "16px",
-                  fontWeight: {
-                    bold: "600",
-                    normal: "400",
-                    medium: "500"
-                  },
-                  spacingUnit: "5px"
+                  showOptionalFields: false
                 },
                 elements: {
-                  card: {
-                    border: "none",
-                    boxShadow: "none",
-                    margin: "0",
-                    padding: "0",
+                  rootBox: {
                     width: "100%",
-                    maxWidth: "100%"
+                    boxShadow: "none",
+                    borderRadius: "12px"
                   },
-                  header: {
-                    margin: "0 0 16px 0",
+                  card: {
+                    border: "1px solid #f1f1f1",
+                    boxShadow: "none",
+                    borderRadius: "12px"
                   },
                   headerTitle: {
-                    content: 'Sign in to Review Now',
-                    fontSize: "20px",
-                    fontWeight: "500"
+                    fontSize: "22px",
+                    fontWeight: "600",
+                    textAlign: "center",
+                    margin: "0",
+                    color: "#1d1d1f",
+                    content: "Sign in to Review Now"
                   },
                   headerSubtitle: {
-                    content: 'Welcome back! Please sign in to continue',
-                    fontSize: "15px",
+                    fontSize: "16px",
                     fontWeight: "400",
-                    color: "#666666",
-                    margin: "4px 0 12px 0"
-                  },
-                  form: {
-                    gap: "14px",
-                    width: "100%"
+                    textAlign: "center",
+                    margin: "8px 0 20px",
+                    color: "#6c757d",
+                    content: "Welcome back! Please sign in to continue"
                   },
                   formButtonPrimary: {
-                    backgroundColor: "#1677FF",
-                    borderRadius: "24px",
-                    boxShadow: "none",
+                    backgroundColor: "#1677ff",
                     fontSize: "16px",
-                    fontWeight: "400",
-                    padding: "10px 0",
-                    margin: "4px 0 0 0",
-                    width: "100%"
+                    borderRadius: "50px",
+                    fontWeight: "500",
+                    padding: "12px",
+                    border: "none"
                   },
                   formFieldInput: {
-                    backgroundColor: "#ffffff",
+                    border: "1px solid #ced4da",
                     borderRadius: "8px",
-                    border: "1px solid #e2e8f0",
-                    boxShadow: "none",
                     fontSize: "16px",
-                    padding: "10px 16px",
-                    width: "100%",
-                    maxWidth: "100%"
+                    padding: "12px 16px"
                   },
-                  dividerLine: {
-                    backgroundColor: "#f1f1f1",
-                    margin: "20px 0"
+                  formFieldLabel: {
+                    fontSize: "16px",
+                    color: "#212529",
+                    marginBottom: "6px"
+                  },
+                  footer: {
+                    display: "flex"
                   },
                   dividerText: {
-                    color: "#94a3b8",
-                    content: "or",
-                    fontSize: "14px"
+                    color: "#6c757d",
+                    fontSize: "14px",
+                    content: "or"
                   },
-                  footerActionText: {
-                    display: "none"
-                  },
-                  footerActionLink: {
-                    display: "none"
+                  dividerLine: {
+                    backgroundColor: "#e9ecef"
                   },
                   socialButtonsIconButton: {
-                    height: "40px",
-                    width: "40px",
-                    maxWidth: "40px"
-                  },
-                  socialButtonsBlockButton: {
-                    maxWidth: "100%"
-                  },
-                  socialButtonsProviderIcon: {
-                    width: "20px",
-                    height: "20px"
+                    boxShadow: "0 0 0 1px rgba(0, 0, 0, 0.05)"
                   }
                 }
               }
