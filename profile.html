@@ -5,6 +5,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Nastoic — Profile</title>
+  <style>
+    /* removes the “Don’t have an account? Sign up” footer */
+    .cl-auth-form__footer,
+    a[aria-label="Sign up"] {
+      display: none !important;
+    }
+  </style>
 
   <!-- Load Clerk script from CDN -->
   <script
