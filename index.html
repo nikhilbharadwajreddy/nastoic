@@ -22,117 +22,91 @@
     }
     
     body {
-      background-color: #f0f2f5;
-      color: #1d1d1f;
+      background-color: #f8f9fa;
+      color: #212529;
       line-height: 1.5;
       font-weight: 400;
     }
     
     .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 0 20px;
+      width: 100%;
+      max-width: 500px;
+      margin: 20px auto 0; /* Moved up by adding top margin only */
+      padding: 0;
+    }
+    
+    .main-box {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
     }
     
     .restaurant-header {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      padding: 15px 20px;
-      margin: 20px 0;
       display: flex;
+      justify-content: center;
       align-items: center;
+      padding: 24px 0; /* Reduced from 32px */
+      background-color: white;
     }
     
     .restaurant-header img {
-      width: 24px;
-      height: 24px;
-      margin-right: 8px;
-    }
-    
-    .restaurant-header h1 {
-      font-size: 22px;
-      font-weight: 500;
-      color: #333;
+      width: 240px;
+      height: auto;
     }
     
     .thank-you-message {
-      background-color: #edf2f7;
-      border-radius: 16px;
-      padding: 20px;
+      background-color: #f8f9fa;
       text-align: center;
-      margin: 20px 0;
+      padding: 16px; /* Reduced from 20px */
+      border-top: 1px solid #f1f1f1;
+      border-bottom: 1px solid #f1f1f1;
     }
     
     .thank-you-message p {
-      font-size: 21px;
-      font-weight: 500;
-      color: #333;
+      font-size: 17px;
+      font-weight: 400;
+      color: #212529;
+      letter-spacing: -0.01em;
     }
     
-    .sign-in-section {
-      text-align: center;
-      margin: 30px 0 20px;
+    /* Clerk container with minimal styling */
+    #clerk-container {
+      padding: 20px; /* Reduced from 24px */
     }
     
-    .sign-in-section h2 {
-      font-size: 26px;
-      font-weight: 600;
-      margin-bottom: 10px;
-      color: #333;
+    /* Hide Clerk logo */
+    .cl-logo {
+      display: none !important;
     }
     
-    .sign-in-section p {
-      font-size: 18px;
-      color: #666;
-      margin-bottom: 20px;
+    /* Hide footer */
+    .cl-footer {
+      display: none !important;
     }
     
-    .clerk-container {
-      background: white;
-      border-radius: 16px;
-      padding: 30px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    }
-    
-    /* Custom styles for the Clerk sign-in UI */
-    .cl-rootBox {
-      width: 100% !important;
-      max-width: 100% !important;
-    }
-    
-    .cl-card {
-      box-shadow: none !important;
-      border: none !important;
-    }
-    
-    .cl-formButtonPrimary {
-      background-color: #1677FF !important;
-      border-radius: 30px !important;
+    /* Hide tabs */
+    .cl-tabs {
+      display: none !important;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Restaurant Header -->
-    <div class="restaurant-header">
-      <img src="bawarchi.png" alt="Bawarchi Logo">
-      <h1>Bawarchi Restaurant</h1>
+    <div class="main-box">
+      <!-- Restaurant Header -->
+      <div class="restaurant-header">
+        <img src="bawarchi.png" alt="Bawarchi Restaurant">
+      </div>
+      
+      <!-- Thank You Message -->
+      <div class="thank-you-message">
+        <p>Thanks for having the meal at Bawarchi Restaurant</p>
+      </div>
+      
+      <!-- Clerk Sign In Container -->
+      <div id="clerk-container"></div>
     </div>
-    
-    <!-- Thank You Message -->
-    <div class="thank-you-message">
-      <p>Thanks for having the meal at Bawarchi Restaurant</p>
-    </div>
-    
-    <!-- Sign In Section -->
-    <div class="sign-in-section">
-      <h2>Sign in with your account</h2>
-      <p>Continue to access your profile</p>
-    </div>
-    
-    <!-- Clerk Sign In Container -->
-    <div class="clerk-container" id="clerk-container"></div>
   </div>
 
   <script>
@@ -147,56 +121,99 @@
               afterSignInUrl: '/profile.html',
               appearance: {
                 layout: {
-                  logoImageUrl: 'bawarchi.png',
-                  logoLinkUrl: '#',
+                  helpPageUrl: null,
+                  logoPlacement: "none",
+                  privacyPageUrl: null,
                   showOptionalFields: false,
-                  socialButtonsPlacement: 'top',
-                  socialButtonsVariant: 'iconButton',
-                  helpPageUrl: '#',
-                  privacyPageUrl: '#',
-                  termsPageUrl: '#'
+                  socialButtonsPlacement: "top",
+                  socialButtonsVariant: "iconButton",
+                  termsPageUrl: null
                 },
                 variables: {
-                  colorPrimary: '#1677FF',
-                  colorText: '#333',
-                  colorTextSecondary: '#666',
-                  colorBackground: '#fff',
-                  colorInputBackground: '#fff',
-                  colorInputText: '#333',
-                  borderRadius: '8px'
+                  borderRadius: "8px",
+                  colorAlphaShade: "#f9fafb",
+                  colorBackground: "#ffffff",
+                  colorDanger: "#ef4444",
+                  colorInputBackground: "#ffffff",
+                  colorInputText: "#333333",
+                  colorPrimary: "#1677FF",
+                  colorShade: "#f1f5f9",
+                  colorSuccess: "#10b981",
+                  colorText: "#333333",
+                  colorTextOnPrimaryBackground: "#ffffff",
+                  colorTextSecondary: "#666666",
+                  fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+                  fontSize: "16px",
+                  fontWeight: {
+                    bold: "600",
+                    normal: "400",
+                    medium: "500"
+                  },
+                  spacingUnit: "5px"
                 },
                 elements: {
-                  logoImage: {
-                    filter: 'none',
-                    height: '60px',
-                    width: 'auto'
+                  card: {
+                    border: "none",
+                    boxShadow: "none",
+                    margin: "0",
+                    padding: "0"
+                  },
+                  header: {
+                    margin: "0 0 16px 0", /* Reduce header margin */
                   },
                   headerTitle: {
-                    content: 'Sign in to Review Now'
+                    content: 'Sign in to Review Now',
+                    fontSize: "20px",
+                    fontWeight: "500"
                   },
                   headerSubtitle: {
-                    content: 'Welcome back! Please sign in to continue'
+                    content: 'Welcome back! Please sign in to continue',
+                    fontSize: "15px",
+                    fontWeight: "400",
+                    color: "#666666",
+                    margin: "4px 0 12px 0" /* Reduced margin */
+                  },
+                  form: {
+                    gap: "14px", /* Reduced from 16px */
+                    width: "100%"
                   },
                   formButtonPrimary: {
-                    fontSize: '16px',
-                    fontWeight: 'normal',
-                    padding: '12px',
-                    backgroundColor: '#1677FF',
-                    borderRadius: '30px'
+                    backgroundColor: "#1677FF",
+                    borderRadius: "24px",
+                    boxShadow: "none",
+                    fontSize: "16px",
+                    fontWeight: "400",
+                    padding: "10px 0",
+                    margin: "4px 0 0 0", /* Reduced top margin */
+                    width: "100%"
                   },
                   formFieldInput: {
-                    borderRadius: '8px',
-                    padding: '12px 16px',
-                    fontSize: '16px'
+                    backgroundColor: "#ffffff",
+                    borderRadius: "8px",
+                    border: "1px solid #e2e8f0",
+                    boxShadow: "none",
+                    fontSize: "16px",
+                    padding: "10px 16px",
+                    width: "100%"
+                  },
+                  dividerLine: {
+                    backgroundColor: "#f1f1f1",
+                    margin: "20px 0" /* Reduced from 24px */
                   },
                   dividerText: {
-                    content: 'or'
+                    color: "#94a3b8",
+                    content: "or",
+                    fontSize: "14px"
                   },
                   footerActionText: {
-                    content: "Don't have an account?"
+                    display: "none"
                   },
                   footerActionLink: {
-                    content: 'Sign up'
+                    display: "none"
+                  },
+                  socialButtonsIconButton: {
+                    height: "40px", /* Slightly smaller */
+                    width: "40px" /* Slightly smaller */
                   }
                 }
               }
@@ -210,16 +227,17 @@
         console.error('Error initializing Clerk:', error);
         document.body.innerHTML = `
           <div class="container">
-            <div class="restaurant-header">
-              <img src="bawarchi.png" alt="Bawarchi Logo">
-              <h1>Bawarchi Restaurant</h1>
-            </div>
-            <div class="thank-you-message">
-              <p>Thanks for having the meal at Bawarchi Restaurant</p>
-            </div>
-            <div style="text-align: center; margin: 30px 0; padding: 20px; background: white; border-radius: 16px;">
-              <h2 style="color: #333; margin-bottom: 10px;">Error Loading Sign In</h2>
-              <p style="color: #666;">There was a problem loading the sign-in page. Please refresh or try again later.</p>
+            <div class="main-box">
+              <div class="restaurant-header">
+                <img src="bawarchi.png" alt="Bawarchi Restaurant">
+              </div>
+              <div class="thank-you-message">
+                <p>Thanks for having the meal at Bawarchi Restaurant</p>
+              </div>
+              <div style="text-align: center; padding: 20px;">
+                <h2 style="color: #333; font-size: 18px; margin-bottom: 8px;">Unable to load sign in</h2>
+                <p style="color: #666; font-size: 14px;">Please refresh the page to try again</p>
+              </div>
             </div>
           </div>
         `;
