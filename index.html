@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Nastoic — Login</title>
   <style>
-    /* removes the “Don’t have an account? Sign up” footer */
+    /* removes the "Don't have an account? Sign up" footer */
     .cl-auth-form__footer,
     a[aria-label="Sign up"] {
       display: none !important;
@@ -105,10 +105,35 @@
       background: #0077ED;
     }
     
+    .restaurant-image {
+      width: 100%;
+      max-width: 340px;
+      height: auto;
+      border-radius: 12px;
+      margin: 24px auto;
+      display: block;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .thank-you-message {
+      text-align: center;
+      font-size: 16px;
+      color: #1d1d1f;
+      margin-top: 16px;
+      padding: 12px;
+      background-color: #f5f7fa;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    
     @media (max-width: 480px) {
       .apple-card {
         border-radius: 14px;
         padding: 30px 20px;
+      }
+      
+      .restaurant-image {
+        max-width: 100%;
       }
     }
   </style>
@@ -118,6 +143,14 @@
     <div class="apple-card">
       <div class="apple-logo">
         <h1>Nastoic</h1>
+      </div>
+      
+      <!-- Bawarchi Restaurant Image -->
+      <img src="bawarchi.png" alt="Bawarchi Restaurant" class="restaurant-image">
+      
+      <!-- Thank You Message -->
+      <div class="thank-you-message">
+        Thanks for having the meal at Bawarchi Restaurant
       </div>
       
       <div class="apple-title">
