@@ -31,8 +31,8 @@
     .container {
       width: 100%;
       max-width: 500px;
-      margin: 20px auto 0; /* Moved up by adding top margin only */
-      padding: 0;
+      margin: 20px auto 0;
+      padding: 0 10px; /* Added padding to prevent elements from touching screen edges */
     }
     
     .main-box {
@@ -40,25 +40,28 @@
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       overflow: hidden;
+      /* Added a max-width to ensure content stays within bounds */
+      max-width: 100%;
     }
     
     .restaurant-header {
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 24px 0; /* Reduced from 32px */
+      padding: 24px 0;
       background-color: white;
     }
     
     .restaurant-header img {
       width: 240px;
       height: auto;
+      max-width: 90%; /* Reduced to prevent overflow */
     }
     
     .thank-you-message {
       background-color: #f8f9fa;
       text-align: center;
-      padding: 16px; /* Reduced from 20px */
+      padding: 16px;
       border-top: 1px solid #f1f1f1;
       border-bottom: 1px solid #f1f1f1;
     }
@@ -70,9 +73,19 @@
       letter-spacing: -0.01em;
     }
     
-    /* Clerk container with minimal styling */
+    /* Clerk container - fixed to contain all content */
     #clerk-container {
-      padding: 20px; /* Reduced from 24px */
+      padding: 20px 15px; /* Reduced horizontal padding */
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden; /* Ensure nothing extends outside */
+    }
+    
+    /* Force all Clerk elements to stay within bounds */
+    .cl-rootBox, .cl-card, .cl-main {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
     }
     
     /* Hide Clerk logo */
@@ -88,6 +101,12 @@
     /* Hide tabs */
     .cl-tabs {
       display: none !important;
+    }
+    
+    /* Ensure social buttons don't overflow */
+    .cl-socialButtonsIconButton {
+      max-width: 40px !important;
+      margin: 0 6px !important;
     }
   </style>
 </head>
@@ -156,10 +175,12 @@
                     border: "none",
                     boxShadow: "none",
                     margin: "0",
-                    padding: "0"
+                    padding: "0",
+                    width: "100%",
+                    maxWidth: "100%"
                   },
                   header: {
-                    margin: "0 0 16px 0", /* Reduce header margin */
+                    margin: "0 0 16px 0",
                   },
                   headerTitle: {
                     content: 'Sign in to Review Now',
@@ -171,10 +192,10 @@
                     fontSize: "15px",
                     fontWeight: "400",
                     color: "#666666",
-                    margin: "4px 0 12px 0" /* Reduced margin */
+                    margin: "4px 0 12px 0"
                   },
                   form: {
-                    gap: "14px", /* Reduced from 16px */
+                    gap: "14px",
                     width: "100%"
                   },
                   formButtonPrimary: {
@@ -184,7 +205,7 @@
                     fontSize: "16px",
                     fontWeight: "400",
                     padding: "10px 0",
-                    margin: "4px 0 0 0", /* Reduced top margin */
+                    margin: "4px 0 0 0",
                     width: "100%"
                   },
                   formFieldInput: {
@@ -194,11 +215,12 @@
                     boxShadow: "none",
                     fontSize: "16px",
                     padding: "10px 16px",
-                    width: "100%"
+                    width: "100%",
+                    maxWidth: "100%"
                   },
                   dividerLine: {
                     backgroundColor: "#f1f1f1",
-                    margin: "20px 0" /* Reduced from 24px */
+                    margin: "20px 0"
                   },
                   dividerText: {
                     color: "#94a3b8",
@@ -212,8 +234,16 @@
                     display: "none"
                   },
                   socialButtonsIconButton: {
-                    height: "40px", /* Slightly smaller */
-                    width: "40px" /* Slightly smaller */
+                    height: "40px",
+                    width: "40px",
+                    maxWidth: "40px"
+                  },
+                  socialButtonsBlockButton: {
+                    maxWidth: "100%"
+                  },
+                  socialButtonsProviderIcon: {
+                    width: "20px",
+                    height: "20px"
                   }
                 }
               }
