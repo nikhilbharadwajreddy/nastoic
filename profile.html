@@ -1,41 +1,58 @@
-<!-- profile.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nastoic - Profile</title>
+  <title>Nastoic — Profile</title>
 
-  <!-- ✅ Same CDN here too -->
+  <!-- same jsDelivr CDN build here too -->
   <script
-  async
-  crossorigin="anonymous"
-  data-clerk-publishable-key="pk_live_Y2xlcmsubmFzdG9pYy5jb20k"
-  src="https://clerk.nastoic.com/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
-  type="text/javascript">
-</script>
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+    data-clerk-publishable-key="pk_live_Y2xlcmsubmFzdG9pYy5jb20k"
+    defer
+  ></script>
 
   <link rel="stylesheet" href="css/styles.css"/>
 </head>
 <body>
-  <!-- Your existing profile form markup goes here -->
-  <form id="profile-form">…</form>
+  <h1>Your Profile</h1>
+  <form id="profile-form">
+    <!-- your form fields, e.g.: -->
+    <label>
+      Name:
+      <input type="text" id="name" name="name"/>
+    </label>
+    <!-- …other fields… -->
+    <button type="submit">Save</button>
+  </form>
   <button id="sign-out">Sign Out</button>
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       await Clerk.load();
-      if (!Clerk.user) {
-        return window.location.href = '/';
-      }
-      // Populate your form with Clerk.user data, e.g.:
-      // document.querySelector('#name').value = Clerk.user.fullName;
 
+      // redirect to login if no session
+      if (!Clerk.user) {
+        window.location.href = '/';
+        return;
+      }
+
+      // populate form fields
+      document.getElementById('name').value =
+        Clerk.user.fullName || Clerk.user.primaryEmailAddress.emailAddress;
+
+      // handle sign out
       document.getElementById('sign-out').onclick = async () => {
         await Clerk.signOut();
         window.location.href = '/';
       };
+
+      // (optional) handle form submission to your backend…
+      document.getElementById('profile-form').addEventListener('submit', e => {
+        e.preventDefault();
+        // save profile…
+      });
     });
   </script>
 </body>

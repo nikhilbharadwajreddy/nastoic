@@ -1,20 +1,17 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nastoic - Login</title>
+  <title>Nastoic — Login</title>
 
-  <!-- ✅ jsDelivr serves with Access-Control-Allow-Origin: * -->
+  <!-- load Clerk from jsDelivr (CORS‑friendly) -->
   <script
-  async
-  crossorigin="anonymous"
-  data-clerk-publishable-key="pk_live_Y2xlcmsubmFzdG9pYy5jb20k"
-  src="https://clerk.nastoic.com/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
-  type="text/javascript">
-</script>
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+    data-clerk-publishable-key="pk_live_Y2xlcmsubmFzdG9pYy5jb20k"
+    defer
+  ></script>
 
   <link rel="stylesheet" href="css/styles.css"/>
 </head>
@@ -23,7 +20,10 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
+      // initialize Clerk
       await Clerk.load();
+
+      // if not signed in, mount the SignIn widget
       if (!Clerk.user) {
         Clerk.mountSignIn(
           document.getElementById('clerk-container'),
@@ -31,6 +31,8 @@
         );
         return;
       }
+
+      // if already signed in, go straight to profile page
       window.location.href = '/profile.html';
     });
   </script>
