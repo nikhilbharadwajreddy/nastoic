@@ -1,17 +1,18 @@
 {
-    "version": 2,
-    "builds": [
-      { "src": "index.html",   "use": "@vercel/static" },
-      { "src": "profile.html", "use": "@vercel/static" },
-      { "src": "clerk.js",     "use": "@vercel/static" },
-      { "src": "css/**/*.css", "use": "@vercel/static" },
-      { "src": "js/**/*.js",   "use": "@vercel/static" }
-    ],
-    "routes": [
-      { "src": "/",            "dest": "/index.html" },
-      { "src": "/profile.html","dest": "/profile.html" },
-      { "handle": "filesystem" },
-      { "src": "/(.*)",        "dest": "/index.html" }
-    ]
-  }
-  
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "frame-ancestors 'self'; default-src 'self' clerk.nastoic.com cdn.jsdelivr.net 'unsafe-inline'; img-src 'self' data: https:; script-src 'self' clerk.nastoic.com cdn.jsdelivr.net 'unsafe-inline' 'unsafe-eval'; style-src 'self' fonts.googleapis.com cdn.jsdelivr.net 'unsafe-inline'; font-src 'self' fonts.gstatic.com data:; connect-src 'self' clerk.nastoic.com cdn.jsdelivr.net;"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/$1" }
+  ],
+  "cleanUrls": true,
+  "trailingSlash": false
+}
