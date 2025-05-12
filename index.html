@@ -5,6 +5,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Nastoic — Login</title>
+  <style>
+    /* removes the “Don’t have an account? Sign up” footer */
+    .cl-auth-form__footer,
+    a[aria-label="Sign up"] {
+      display: none !important;
+    }
+  </style>
 
   <!-- Load Clerk script from CDN -->
   <script
@@ -38,14 +45,13 @@
     }
     
     .apple-card {
+      max-width: 420px;
       width: 100%;
-      max-width: 480px; /* Increased from 420px */
       background: #ffffff;
       border-radius: 18px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
       padding: 40px 30px;
       transition: all 0.3s ease;
-      overflow: hidden; /* Prevent content from flowing outside */
     }
     
     .apple-logo {
@@ -99,40 +105,13 @@
       background: #0077ED;
     }
     
-    /* Ensure Clerk container doesn't overflow */
-    #clerk-container {
-      width: 100%;
-      max-width: 100%;
-    }
-    
-    /* Custom styles for Clerk elements */
-    :root {
-      --clerk-form-min-width: auto !important;
-      --clerk-form-max-width: 100% !important;
-    }
-    
-    @media (max-width: 550px) {
+    @media (max-width: 480px) {
       .apple-card {
         border-radius: 14px;
-        padding: 24px 16px;
-        margin: 0 10px;
-      }
-      
-      .apple-logo {
-        margin-bottom: 24px;
-      }
-      
-      .apple-title h2 {
-        font-size: 18px;
-      }
-      
-      .apple-title p {
-        font-size: 13px;
+        padding: 30px 20px;
       }
     }
   </style>
-  <!-- Hide Vercel badge -->  
-  <link rel="stylesheet" href="css/hide-vercel.css">
 </head>
 <body>
   <div class="apple-container">
@@ -161,40 +140,14 @@
             { 
               afterSignInUrl: '/profile.html',
               appearance: {
-                layout: {
-                  socialButtonsVariant: 'iconButton',
-                  socialButtonsPlacement: 'bottom',
-                  logoPlacement: 'none',
-                  termsPageUrl: 'none',
-                  helpPageUrl: 'none',
-                  privacyPageUrl: 'none'
-                },
-                variables: {
-                  colorPrimary: '#0071e3',
-                  borderRadius: '8px',
-                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-                  colorText: '#1d1d1f',
-                  colorTextSecondary: '#86868b',
-                  colorBackground: '#ffffff',
-                  colorInputBackground: '#ffffff',
-                  colorInputText: '#1d1d1f',
-                  spacingUnit: '4px'
-                },
                 elements: {
                   rootBox: {
                     width: '100%',
-                    margin: '0 auto',
-                    overflow: 'visible'
+                    margin: '0 auto'
                   },
                   card: {
                     border: 'none',
                     boxShadow: 'none',
-                    width: '100%',
-                    maxWidth: '100%',
-                    margin: '0'
-                  },
-                  form: {
-                    gap: '16px',
                     width: '100%'
                   },
                   formButtonPrimary: {
@@ -202,15 +155,13 @@
                     borderRadius: '980px',
                     fontWeight: '400',
                     fontSize: '14px',
-                    padding: '8px 16px',
-                    width: '100%'
+                    padding: '8px 16px'
                   },
                   formFieldInput: {
                     border: '1px solid #d2d2d7',
                     borderRadius: '8px',
                     padding: '12px 16px',
-                    fontSize: '14px',
-                    width: '100%'
+                    fontSize: '14px'
                   },
                   formFieldLabel: {
                     fontSize: '14px',
@@ -223,18 +174,6 @@
                   footerActionLink: {
                     color: '#0071e3',
                     fontSize: '12px'
-                  },
-                  dividerRow: {
-                    fontSize: '12px',
-                    color: '#86868b'
-                  },
-                  identityPreview: {
-                    borderRadius: '8px',
-                    padding: '12px 16px'
-                  },
-                  avatarBox: {
-                    width: '32px',
-                    height: '32px'
                   }
                 }
               }
@@ -262,7 +201,5 @@
       }
     });
   </script>
-  <!-- Script to hide Vercel badge -->
-  <script src="js/hide-vercel.js"></script>
 </body>
 </html>
