@@ -6,34 +6,117 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Nastoic — Login</title>
 
-  <!-- load Clerk from jsDelivr (CORS‑friendly) -->
+  <!-- Load Clerk script from CDN -->
   <script
     src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
     data-clerk-publishable-key="pk_live_Y2xlcmsubmFzdG9pYy5jb20k"
     defer
   ></script>
 
-  <link rel="stylesheet" href="css/styles.css"/>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9f9f9;
+    }
+    .formbold-main-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px;
+      min-height: 100vh;
+    }
+    .formbold-form-wrapper {
+      margin: 0 auto;
+      max-width: 570px;
+      width: 100%;
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+    }
+    .formbold-form-title {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .formbold-form-title h2 {
+      font-weight: 600;
+      font-size: 28px;
+      line-height: 34px;
+      color: #07074d;
+    }
+    .formbold-form-title p {
+      font-size: 16px;
+      line-height: 24px;
+      color: #536387;
+      margin-top: 12px;
+    }
+  </style>
 </head>
 <body>
-  <div id="clerk-container"></div>
+  <div class="formbold-main-wrapper">
+    <div class="formbold-form-wrapper">
+      <div class="formbold-form-title">
+        <h2>Welcome to Nastoic</h2>
+        <p>Please sign in to continue to your profile</p>
+      </div>
+      
+      <div id="clerk-container"></div>
+    </div>
+  </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      // initialize Clerk
-      await Clerk.load();
+      try {
+        // Initialize Clerk
+        await Clerk.load();
 
-      // if not signed in, mount the SignIn widget
-      if (!Clerk.user) {
-        Clerk.mountSignIn(
-          document.getElementById('clerk-container'),
-          { afterSignInUrl: '/profile.html' }
-        );
-        return;
+        // If not signed in, mount the SignIn widget
+        if (!Clerk.user) {
+          Clerk.mountSignIn(
+            document.getElementById('clerk-container'),
+            { 
+              afterSignInUrl: '/profile.html',
+              appearance: {
+                elements: {
+                  rootBox: {
+                    width: '100%',
+                    margin: '0 auto'
+                  },
+                  card: {
+                    border: 'none',
+                    boxShadow: 'none',
+                    width: '100%'
+                  }
+                }
+              }
+            }
+          );
+          return;
+        }
+
+        // If already signed in, go straight to profile page
+        window.location.href = '/profile.html';
+      } catch (error) {
+        console.error('Error initializing Clerk:', error);
+        document.body.innerHTML = `
+          <div class="formbold-main-wrapper">
+            <div class="formbold-form-wrapper">
+              <div class="formbold-form-title">
+                <h2>Error Loading Login</h2>
+                <p>There was a problem loading the login page. Please refresh or try again later.</p>
+              </div>
+            </div>
+          </div>
+        `;
       }
-
-      // if already signed in, go straight to profile page
-      window.location.href = '/profile.html';
     });
   </script>
 </body>
