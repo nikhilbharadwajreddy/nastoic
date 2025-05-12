@@ -30,7 +30,7 @@
     
     .container {
       width: 100%;
-      max-width: 500px;
+      max-width: 480px;
       margin: 15px auto;
       padding: 0;
     }
@@ -59,7 +59,7 @@
     .thank-you-message {
       background-color: #f5f7fa;
       text-align: center;
-      padding: 20px;
+      padding: 20px 0;
       border-top: 1px solid #ebedf0;
       border-bottom: 1px solid #ebedf0;
     }
@@ -72,21 +72,40 @@
     }
     
     .clerk-outer-container {
-      padding: 20px;
+      display: flex;
+      justify-content: center;
+      padding: 20px 0;
       background-color: white;
     }
     
     #clerk-container {
-      width: 100%;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+      width: 90%;
+      max-width: 400px;
+    }
+    
+    /* Make sure Clerk card is centered */
+    .cl-rootBox {
+      display: flex !important;
+      justify-content: center !important;
+      width: 100% !important;
+    }
+    
+    .cl-card {
+      width: 100% !important;
+      max-width: 400px !important;
+      margin: 0 auto !important;
     }
     
     /* Override some Clerk styles to match the screenshot */
     :root {
       --clerk-footer-text-color: #6c757d !important;
       --clerk-color-primary: #1677ff !important;
+    }
+    
+    /* Center "Secured by Clerk" text */
+    .cl-footer {
+      justify-content: center !important;
+      padding: 16px 0 !important;
     }
   </style>
 </head>
@@ -125,18 +144,28 @@
                 layout: {
                   socialButtonsPlacement: "top",
                   socialButtonsVariant: "iconButton",
-                  showOptionalFields: false
+                  showOptionalFields: false,
+                  logoImageUrl: "bawarchi.png",
+                  logoPlacement: "inside"
                 },
                 elements: {
+                  logoImage: {
+                    width: "110px",
+                    height: "auto",
+                    margin: "0 auto 16px"
+                  },
                   rootBox: {
                     width: "100%",
-                    boxShadow: "none",
-                    borderRadius: "12px"
+                    margin: "0 auto"
                   },
                   card: {
-                    border: "1px solid #f1f1f1",
-                    boxShadow: "none",
-                    borderRadius: "12px"
+                    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+                    border: "none",
+                    width: "100%",
+                    maxWidth: "100%",
+                    borderRadius: "12px",
+                    margin: "0 auto",
+                    padding: "24px 20px"
                   },
                   headerTitle: {
                     fontSize: "22px",
@@ -174,7 +203,11 @@
                     marginBottom: "6px"
                   },
                   footer: {
-                    display: "flex"
+                    display: "flex",
+                    justifyContent: "center"
+                  },
+                  footerActionLink: {
+                    color: "#1677ff"
                   },
                   dividerText: {
                     color: "#6c757d",
@@ -185,7 +218,25 @@
                     backgroundColor: "#e9ecef"
                   },
                   socialButtonsIconButton: {
-                    boxShadow: "0 0 0 1px rgba(0, 0, 0, 0.05)"
+                    boxShadow: "0 0 0 1px rgba(0, 0, 0, 0.05)",
+                    borderRadius: "8px"
+                  },
+                  socialButtonsBlockButton: {
+                    boxShadow: "0 0 0 1px rgba(0, 0, 0, 0.05)",
+                    borderRadius: "8px",
+                    justifyContent: "center"
+                  },
+                  socialButtonsProviderIcon: {
+                    width: "20px",
+                    height: "20px"
+                  },
+                  main: {
+                    gap: "24px",
+                    width: "100%"
+                  },
+                  identityPreview: {
+                    margin: "0 0 20px 0",
+                    width: "100%"
                   }
                 }
               }
