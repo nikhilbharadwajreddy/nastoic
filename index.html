@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,48 +7,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Nastoic - Login</title>
 
-  <!-- Load Clerk's UMD bundle -->
+  <!-- ✅ jsDelivr serves with Access-Control-Allow-Origin: * -->
   <script
-    src="https://clerk.nastoic.com/clerk.js"
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
     data-clerk-publishable-key="pk_live_Y2xlcmsubmFzdG9pYy5jb20k"
-    crossorigin="anonymous">
-  </script>
+    defer
+  ></script>
 
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css"/>
 </head>
-
 <body>
-  <div class="container">
-    <div class="login-container">
-      <div class="logo">
-        <h1>Nastoic</h1>
-      </div>
-      
-      <!-- This container will host Clerk's SignIn widget -->
-      <div id="clerk-container"></div>
-    </div>
-  </div>
+  <div id="clerk-container"></div>
 
-  <script src="js/app.js"></script>
   <script>
-    window.addEventListener('load', async () => {
-      // Wait for Clerk to initialize
+    document.addEventListener('DOMContentLoaded', async () => {
       await Clerk.load();
-
-      // If there is no user session, show the SignIn widget
       if (!Clerk.user) {
         Clerk.mountSignIn(
           document.getElementById('clerk-container'),
-          {
-            // After successful sign‑in, redirect to the profile page
-            afterSignInUrl: '/profile.html'
-          }
+          { afterSignInUrl: '/profile.html' }
         );
         return;
-      } else {
-        // If user is already signed in, redirect to profile page
-        window.location.href = '/profile.html';
       }
+      window.location.href = '/profile.html';
     });
   </script>
 </body>
