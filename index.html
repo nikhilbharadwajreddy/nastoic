@@ -4,14 +4,7 @@
   <meta charset="UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nastoic — Login</title>
-  <style>
-    /* removes the "Don't have an account? Sign up" footer */
-    .cl-auth-form__footer,
-    a[aria-label="Sign up"] {
-      display: none !important;
-    }
-  </style>
+  <title>Bawarchi Restaurant</title>
 
   <!-- Load Clerk script from CDN -->
   <script
@@ -25,141 +18,121 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
     
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #f5f5f7;
+      background-color: #f0f2f5;
       color: #1d1d1f;
-      line-height: 1.47059;
+      line-height: 1.5;
       font-weight: 400;
-      letter-spacing: -0.022em;
     }
     
-    .apple-container {
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .restaurant-header {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      padding: 15px 20px;
+      margin: 20px 0;
       display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 20px;
-      min-height: 100vh;
     }
     
-    .apple-card {
-      max-width: 420px;
-      width: 100%;
-      background: #ffffff;
-      border-radius: 18px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      padding: 40px 30px;
-      transition: all 0.3s ease;
+    .restaurant-header img {
+      width: 24px;
+      height: 24px;
+      margin-right: 8px;
     }
     
-    .apple-logo {
-      text-align: center;
-      margin-bottom: 36px;
-    }
-    
-    .apple-logo h1 {
-      font-size: 27px;
+    .restaurant-header h1 {
+      font-size: 22px;
       font-weight: 500;
-      letter-spacing: -0.05em;
-      color: #1d1d1f;
-    }
-    
-    .apple-title {
-      margin-bottom: 24px;
-      text-align: center;
-    }
-    
-    .apple-title h2 {
-      font-weight: 500;
-      font-size: 21px;
-      letter-spacing: -0.022em;
-      color: #1d1d1f;
-      margin-bottom: 6px;
-    }
-    
-    .apple-title p {
-      font-size: 14px;
-      color: #86868b;
-      margin-top: 8px;
-    }
-    
-    .apple-button {
-      display: inline-block;
-      background: #0071e3;
-      color: #ffffff;
-      font-size: 14px;
-      font-weight: 400;
-      text-align: center;
-      border-radius: 980px;
-      padding: 8px 16px;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      min-width: 28px;
-      min-height: 28px;
-    }
-    
-    .apple-button:hover {
-      background: #0077ED;
-    }
-    
-    .restaurant-image {
-      width: 100%;
-      max-width: 340px;
-      height: auto;
-      border-radius: 12px;
-      margin: 24px auto;
-      display: block;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      color: #333;
     }
     
     .thank-you-message {
+      background-color: #edf2f7;
+      border-radius: 16px;
+      padding: 20px;
       text-align: center;
-      font-size: 16px;
-      color: #1d1d1f;
-      margin-top: 16px;
-      padding: 12px;
-      background-color: #f5f7fa;
-      border-radius: 8px;
-      font-weight: 500;
+      margin: 20px 0;
     }
     
-    @media (max-width: 480px) {
-      .apple-card {
-        border-radius: 14px;
-        padding: 30px 20px;
-      }
-      
-      .restaurant-image {
-        max-width: 100%;
-      }
+    .thank-you-message p {
+      font-size: 21px;
+      font-weight: 500;
+      color: #333;
+    }
+    
+    .sign-in-section {
+      text-align: center;
+      margin: 30px 0 20px;
+    }
+    
+    .sign-in-section h2 {
+      font-size: 26px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    
+    .sign-in-section p {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+    
+    .clerk-container {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Custom styles for the Clerk sign-in UI */
+    .cl-rootBox {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    
+    .cl-card {
+      box-shadow: none !important;
+      border: none !important;
+    }
+    
+    .cl-formButtonPrimary {
+      background-color: #1677FF !important;
+      border-radius: 30px !important;
     }
   </style>
 </head>
 <body>
-  <div class="apple-container">
-    <div class="apple-card">
-      <div class="apple-logo">
-        <h1>Nastoic</h1>
-      </div>
-      
-      <!-- Bawarchi Restaurant Image -->
-      <img src="bawarchi.png" alt="Bawarchi Restaurant" class="restaurant-image">
-      
-      <!-- Thank You Message -->
-      <div class="thank-you-message">
-        Thanks for having the meal at Bawarchi Restaurant
-      </div>
-      
-      <div class="apple-title">
-        <h2>Sign in with your account</h2>
-        <p>Continue to access your profile</p>
-      </div>
-      
-      <div id="clerk-container"></div>
+  <div class="container">
+    <!-- Restaurant Header -->
+    <div class="restaurant-header">
+      <img src="bawarchi.png" alt="Bawarchi Logo">
+      <h1>Bawarchi Restaurant</h1>
     </div>
+    
+    <!-- Thank You Message -->
+    <div class="thank-you-message">
+      <p>Thanks for having the meal at Bawarchi Restaurant</p>
+    </div>
+    
+    <!-- Sign In Section -->
+    <div class="sign-in-section">
+      <h2>Sign in with your account</h2>
+      <p>Continue to access your profile</p>
+    </div>
+    
+    <!-- Clerk Sign In Container -->
+    <div class="clerk-container" id="clerk-container"></div>
   </div>
 
   <script>
@@ -173,40 +146,57 @@
             { 
               afterSignInUrl: '/profile.html',
               appearance: {
+                layout: {
+                  logoImageUrl: 'bawarchi.png',
+                  logoLinkUrl: '#',
+                  showOptionalFields: false,
+                  socialButtonsPlacement: 'top',
+                  socialButtonsVariant: 'iconButton',
+                  helpPageUrl: '#',
+                  privacyPageUrl: '#',
+                  termsPageUrl: '#'
+                },
+                variables: {
+                  colorPrimary: '#1677FF',
+                  colorText: '#333',
+                  colorTextSecondary: '#666',
+                  colorBackground: '#fff',
+                  colorInputBackground: '#fff',
+                  colorInputText: '#333',
+                  borderRadius: '8px'
+                },
                 elements: {
-                  rootBox: {
-                    width: '100%',
-                    margin: '0 auto'
+                  logoImage: {
+                    filter: 'none',
+                    height: '60px',
+                    width: 'auto'
                   },
-                  card: {
-                    border: 'none',
-                    boxShadow: 'none',
-                    width: '100%'
+                  headerTitle: {
+                    content: 'Sign in to Review Now'
+                  },
+                  headerSubtitle: {
+                    content: 'Welcome back! Please sign in to continue'
                   },
                   formButtonPrimary: {
-                    backgroundColor: '#0071e3',
-                    borderRadius: '980px',
-                    fontWeight: '400',
-                    fontSize: '14px',
-                    padding: '8px 16px'
+                    fontSize: '16px',
+                    fontWeight: 'normal',
+                    padding: '12px',
+                    backgroundColor: '#1677FF',
+                    borderRadius: '30px'
                   },
                   formFieldInput: {
-                    border: '1px solid #d2d2d7',
                     borderRadius: '8px',
                     padding: '12px 16px',
-                    fontSize: '14px'
+                    fontSize: '16px'
                   },
-                  formFieldLabel: {
-                    fontSize: '14px',
-                    color: '#1d1d1f'
+                  dividerText: {
+                    content: 'or'
                   },
                   footerActionText: {
-                    fontSize: '12px',
-                    color: '#86868b'
+                    content: "Don't have an account?"
                   },
                   footerActionLink: {
-                    color: '#0071e3',
-                    fontSize: '12px'
+                    content: 'Sign up'
                   }
                 }
               }
@@ -219,15 +209,17 @@
       } catch (error) {
         console.error('Error initializing Clerk:', error);
         document.body.innerHTML = `
-          <div class="apple-container">
-            <div class="apple-card">
-              <div class="apple-logo">
-                <h1>Nastoic</h1>
-              </div>
-              <div class="apple-title">
-                <h2>Error Loading Login</h2>
-                <p>There was a problem loading the login page. Please refresh or try again later.</p>
-              </div>
+          <div class="container">
+            <div class="restaurant-header">
+              <img src="bawarchi.png" alt="Bawarchi Logo">
+              <h1>Bawarchi Restaurant</h1>
+            </div>
+            <div class="thank-you-message">
+              <p>Thanks for having the meal at Bawarchi Restaurant</p>
+            </div>
+            <div style="text-align: center; margin: 30px 0; padding: 20px; background: white; border-radius: 16px;">
+              <h2 style="color: #333; margin-bottom: 10px;">Error Loading Sign In</h2>
+              <p style="color: #666;">There was a problem loading the sign-in page. Please refresh or try again later.</p>
             </div>
           </div>
         `;
