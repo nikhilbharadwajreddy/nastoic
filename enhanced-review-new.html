@@ -232,15 +232,27 @@
             <label>Is today a special occasion?</label>
             <div class="radio-group">
               <label class="radio-container">
-                <input type="radio" name="special_occasion" value="yes">
+                <input type="radio" name="special_occasion" value="yes" id="special_occasion_yes">
                 <span class="radio-label">Yes</span>
               </label>
               <label class="radio-container">
-                <input type="radio" name="special_occasion" value="no">
+                <input type="radio" name="special_occasion" value="no" id="special_occasion_no">
                 <span class="radio-label">No</span>
               </label>
             </div>
             <p class="field-note">We love celebrating with our guests 🎉 Let us know if today's special!</p>
+          </div>
+          
+          <!-- Occasion details field (initially hidden) -->
+          <div class="form-group occasion-details-container" id="occasion_details_group" style="display: none;">
+            <label for="occasion_details">What are you celebrating?</label>
+            <input 
+              type="text"
+              id="occasion_details"
+              name="occasion_details"
+              placeholder="Tell us about your special occasion"
+            />
+            <p class="field-note">We'd love to make your celebration extra special! 🎊</p>
           </div>
           
           <div class="form-actions">
@@ -752,6 +764,22 @@
       to { opacity: 1; transform: translateY(0); }
     }
     
+    /* Special occasion details animation */
+    .occasion-details-container {
+      transition: all 0.3s ease-in-out;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .occasion-details-container.visible {
+      max-height: 300px;
+      opacity: 1;
+      margin-bottom: 20px;
+    }
+    
     /* Responsive adjustments */
     @media (max-width: 600px) {
       .review-card {
@@ -818,6 +846,35 @@
               }
             });
           }
+        }
+        
+        // Setup special occasion conditional field
+        const specialOccasionYes = document.getElementById('special_occasion_yes');
+        const specialOccasionNo = document.getElementById('special_occasion_no');
+        const occasionDetailsGroup = document.getElementById('occasion_details_group');
+        
+        if (specialOccasionYes && specialOccasionNo && occasionDetailsGroup) {
+          specialOccasionYes.addEventListener('change', () => {
+            if (specialOccasionYes.checked) {
+              occasionDetailsGroup.style.display = 'block';
+              // Use setTimeout to allow the display:block to take effect first
+              setTimeout(() => {
+                occasionDetailsGroup.classList.add('visible');
+              }, 10);
+            }
+          });
+          
+          specialOccasionNo.addEventListener('change', () => {
+            if (specialOccasionNo.checked) {
+              occasionDetailsGroup.classList.remove('visible');
+              // Clear the input value when hiding
+              document.getElementById('occasion_details').value = '';
+              // Hide the element after animation completes
+              setTimeout(() => {
+                occasionDetailsGroup.style.display = 'none';
+              }, 300); // Match the transition duration
+            }
+          });
         }
         
         // DOM elements
@@ -929,6 +986,12 @@
           // Get form data for submission
           const formData = new FormData(form);
           const reviewData = Object.fromEntries(formData);
+          
+          // Make sure the occasion details are properly processed
+          if (reviewData.special_occasion === 'no' || !reviewData.special_occasion) {
+            // If no special occasion, ensure we remove any details
+            delete reviewData.occasion_details;
+          }
           
           // Show a visual indicator that submission is happening
           const submitButton = document.querySelector('.btn-submit');
