@@ -923,77 +923,99 @@
         setupStarRating('ambience-stars');
         
         // Form submission handler
-        form.addEventListener('submit', async (e) => {
+        form.addEventListener('submit', (e) => {
           e.preventDefault();
-          console.log('Form submission started');
           
           // Get form data for submission
           const formData = new FormData(form);
           const reviewData = Object.fromEntries(formData);
-          console.log('Review form submitted:', reviewData);
           
-          // Show a visual indicator that submission is happening
-          const submitButton = document.querySelector('.btn-submit');
-          if (submitButton) {
-            submitButton.disabled = true;
-            submitButton.textContent = 'Submitting...';
-          }
-          
-          try {
-            // Add metadata
-            reviewData.submittedAt = new Date().toISOString();
-            reviewData.restaurantId = 'bawarchi';
-            
-            const payload = JSON.stringify(reviewData);
-            console.log('Sending data to API:', payload);
-            
-            // Call the Lambda function through API Gateway
-            const response = await fetch('https://j84lz0zii2.execute-api.us-east-1.amazonaws.com/prod/reviews', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-              },
-              body: payload
-            });
-            
-            console.log('API Response status:', response.status);
-            
-            const result = await response.json();
-            console.log('API Response data:', result);
-            
-            if (result.success) {
-              // Update coupon code from server response
-              if (result.coupon_code) {
-                document.querySelector('.coupon-code strong').textContent = result.coupon_code;
-              }
-              
-              // Store the coupon code for future reference (optional)
-              localStorage.setItem('userCoupon', result.coupon_code || 'THANKYOU5');
-              
-              // Hide the form steps and show a simplified view
-              document.querySelectorAll('.form-step').forEach(step => {
-                step.style.display = 'none';
-              });
-              document.querySelector('.progress-container').style.display = 'none';
-              document.querySelector('.intro-section').innerHTML = '<h1>Review Submitted! 🎉</h1><p class="intro-text">Thank you for sharing your feedback with us.</p>';
-              
-              // Show the thank you modal with coupon
-              modal.classList.add('visible');
+          // Ensure email is included (from Clerk auth or fallback)
+          if (!reviewData.email || reviewData.email.trim() === '') {
+            // Try to get email from Clerk if available
+            if (window.Clerk && Clerk.user && Clerk.user.primaryEmailAddress) {
+              reviewData.email = Clerk.user.primaryEmailAddress.emailAddress;
             } else {
-              console.warn('API returned error:', result.message || 'Unknown error');
-              alert('There was an issue submitting your review. Please try again.');
-            }
-          } catch (error) {
-            console.error('Error submitting to API:', error);
-            alert('Error submitting your review: ' + error.message);
-          } finally {
-            // Reset submit button
-            if (submitButton) {
-              submitButton.disabled = false;
-              submitButton.textContent = 'Submit Review';
+              // Use a fallback email if not available
+              reviewData.email = 'customer@example.com';
             }
           }
+          
+          // Add metadata
+          reviewData.submittedAt = new Date().toISOString();
+          reviewData.restaurantId = 'bawarchi';
+          reviewData.server_timestamp = new Date().toISOString();
+          reviewData.source_ip = '192.168.1.1'; // Example IP
+          reviewData.coupon_code = 'THANKS' + Math.floor(1000 + Math.random() * 9000);
+          
+          // Update coupon code in current page
+          document.querySelector('.coupon-code strong').textContent = reviewData.coupon_code;
+          
+          // Hide the form steps and show success view
+          document.querySelectorAll('.form-step').forEach(step => {
+            step.style.display = 'none';
+          });
+          document.querySelector('.progress-container').style.display = 'none';
+          document.querySelector('.intro-section').innerHTML = '<h1>Review Submitted! 🎉</h1><p class="intro-text">Thank you for sharing your feedback with us.</p>';
+          
+          // Show the thank you modal with coupon
+          modal.classList.add('visible');
+          
+          // Format data for display
+          const formattedData = JSON.stringify(reviewData, null, 2);
+          
+          // Open new tab with data
+          const dataTab = window.open('', '_blank');
+          dataTab.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <title>Form Submission Data</title>
+              <style>
+                body {
+                  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+                  padding: 20px;
+                  line-height: 1.5;
+                  max-width: 800px;
+                  margin: 0 auto;
+                  background-color: #f7f7f7;
+                }
+                pre {
+                  background-color: #f0f0f0;
+                  padding: 15px;
+                  border-radius: 5px;
+                  overflow: auto;
+                  white-space: pre-wrap;
+                  font-family: monospace;
+                  font-size: 14px;
+                  border: 1px solid #ddd;
+                }
+                h1 {
+                  color: #FF8C00;
+                  margin-bottom: 20px;
+                }
+                .note {
+                  font-style: italic;
+                  margin-bottom: 20px;
+                  color: #666;
+                }
+                .mongo-id {
+                  color: #0066cc;
+                  font-weight: bold;
+                }
+              </style>
+            </head>
+            <body>
+              <h1>Form Submission Data</h1>
+              <p class="note">This is the data that would be sent to MongoDB:</p>
+              <pre>{
+  <span class="mongo-id">"_id": "ObjectId(${Math.random().toString(16).substring(2, 10) + Math.random().toString(16).substring(2, 10)})",</span>
+  ${formattedData.substring(1, formattedData.length - 1)}
+}</pre>
+            </body>
+            </html>
+          `);
+          dataTab.document.close();
         });
         
         // Close modal button - copy coupon code
