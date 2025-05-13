@@ -4,14 +4,7 @@
   <meta charset="UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nastoic — Profile</title>
-  <style>
-    /* removes the “Don’t have an account? Sign up” footer */
-    .cl-auth-form__footer,
-    a[aria-label="Sign up"] {
-      display: none !important;
-    }
-  </style>
+  <title>Bawarchi Restaurant — Review</title>
 
   <!-- Load Clerk script from CDN -->
   <script
@@ -24,140 +17,126 @@
   <div class="apple-container">
     <div class="apple-card">
       <div class="apple-header">
-        <h1>Nastoic</h1>
+        <div class="logo-container">
+          <img src="https://restaurant-review-logos.s3.us-east-1.amazonaws.com/bawarchi.png" alt="Bawarchi Restaurant" class="restaurant-logo">
+        </div>
         <button id="sign-out" class="apple-button apple-button-secondary">Sign Out</button>
       </div>
       
       <div class="apple-title">
-        <h2>Complete Your Profile</h2>
-        <p>Please provide your information below.</p>
+        <p style="color: #ff8c00; margin-top: 8px; font-size: 14px;">Your dining experience drives our kitchen: every comment goes straight to the chef and manager, who'll fix any misses or celebrate the highlights.</p>
       </div>
 
       <form id="profile-form" class="apple-form">
-        <div class="apple-form-row">
-          <div class="apple-form-group">
-            <label for="firstname" class="apple-form-label">First name</label>
-            <input
-              type="text"
-              name="firstname"
-              id="firstname"
-              class="apple-form-input"
-              placeholder="First name"
-            />
-          </div>
-          <div class="apple-form-group">
-            <label for="lastname" class="apple-form-label">Last name</label>
-            <input
-              type="text"
-              name="lastname"
-              id="lastname"
-              class="apple-form-input"
-              placeholder="Last name"
-            />
-          </div>
-        </div>
-
-        <div class="apple-form-row">
-          <div class="apple-form-group">
-            <label for="email" class="apple-form-label">Email</label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              class="apple-form-input"
-              placeholder="Email address"
-              readonly
-            />
-          </div>
-          <div class="apple-form-group">
-            <label for="phone" class="apple-form-label">Phone number</label>
-            <input
-              type="tel"
-              name="phone"
-              id="phone"
-              class="apple-form-input"
-              placeholder="Phone number"
-            />
-          </div>
-        </div>
-
+        <!-- Hidden email field - will be populated from Clerk -->
+        <input type="hidden" name="email" id="email" />
+        
+        <!-- Gender Selection -->
         <div class="apple-form-group apple-form-full">
-          <label for="address" class="apple-form-label">Street Address</label>
+          <label class="apple-form-label">Gender</label>
+          <div class="apple-form-radio-group">
+            <label class="apple-radio-label">
+              <input type="radio" name="gender" value="male" class="apple-radio-input" />
+              <span class="apple-radio-text">Male</span>
+            </label>
+            <label class="apple-radio-label">
+              <input type="radio" name="gender" value="female" class="apple-radio-input" />
+              <span class="apple-radio-text">Female</span>
+            </label>
+            <label class="apple-radio-label">
+              <input type="radio" name="gender" value="not_specified" class="apple-radio-input" />
+              <span class="apple-radio-text">Prefer not to say</span>
+            </label>
+          </div>
+        </div>
+        
+        <!-- Date of Birth -->
+        <div class="apple-form-group apple-form-full">
+          <label for="dob" class="apple-form-label">Date of Birth</label>
           <input
-            type="text"
-            name="address"
-            id="address"
+            type="date"
+            name="dob"
+            id="dob"
             class="apple-form-input"
-            placeholder="Street address"
           />
         </div>
 
+        <!-- What did you eat today? -->
         <div class="apple-form-group apple-form-full">
-          <label for="address2" class="apple-form-label">Street Address Line 2</label>
+          <label for="food_eaten" class="apple-form-label">What did you eat today?</label>
           <input
             type="text"
-            name="address2"
-            id="address2"
+            name="food_eaten"
+            id="food_eaten"
             class="apple-form-input"
-            placeholder="Apt, suite, unit, building, floor, etc."
+            placeholder="Enter the dishes you ordered"
           />
         </div>
 
-        <div class="apple-form-row">
-          <div class="apple-form-group">
-            <label for="state" class="apple-form-label">State/Province</label>
+        <!-- Honest review about the food -->
+        <div class="apple-form-group apple-form-full">
+          <label for="food_review" class="apple-form-label">Honest review about the food</label>
+          <textarea
+            name="food_review"
+            id="food_review"
+            class="apple-form-input apple-form-textarea"
+            placeholder="Share your thoughts about the food"
+            rows="4"
+          ></textarea>
+        </div>
+
+        <!-- Food Rating -->
+        <div class="apple-form-group apple-form-full">
+          <label for="food_rating" class="apple-form-label">How do you feel about the food? (0-5)</label>
+          <div class="apple-form-slider-container">
             <input
-              type="text"
-              name="state"
-              id="state"
-              class="apple-form-input"
-              placeholder="State or province"
+              type="range"
+              name="food_rating"
+              id="food_rating"
+              min="0"
+              max="5"
+              step="0.1"
+              value="3.0"
+              class="apple-form-slider"
+              oninput="document.getElementById('food_rating_value').textContent = this.value"
             />
-          </div>
-          <div class="apple-form-group">
-            <label for="country" class="apple-form-label">Country</label>
-            <input
-              type="text"
-              name="country"
-              id="country"
-              class="apple-form-input"
-              placeholder="Country"
-            />
+            <span id="food_rating_value" class="apple-form-slider-value">3.0</span>
           </div>
         </div>
 
-        <div class="apple-form-row">
-          <div class="apple-form-group">
-            <label for="post" class="apple-form-label">Post/Zip code</label>
-            <input
-              type="text"
-              name="post"
-              id="post"
-              class="apple-form-input"
-              placeholder="Postal or zip code"
-            />
-          </div>
-          <div class="apple-form-group">
-            <label for="area" class="apple-form-label">Area Code</label>
-            <input
-              type="text"
-              name="area"
-              id="area"
-              class="apple-form-input"
-              placeholder="Area code"
-            />
-          </div>
+        <!-- Ambience Review -->
+        <div class="apple-form-group apple-form-full">
+          <label for="ambience_review" class="apple-form-label">How was the ambience?</label>
+          <textarea
+            name="ambience_review"
+            id="ambience_review"
+            class="apple-form-input apple-form-textarea"
+            placeholder="Share your thoughts about the ambience"
+            rows="3"
+          ></textarea>
         </div>
 
-        <div class="apple-checkbox-wrapper">
-          <input type="checkbox" id="supportCheckbox" class="apple-checkbox" />
-          <label for="supportCheckbox" class="apple-checkbox-label">
-            I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a>
-          </label>
+        <!-- Ambience Rating -->
+        <div class="apple-form-group apple-form-full">
+          <label for="ambience_rating" class="apple-form-label">Ambience Rating (0-5)</label>
+          <div class="apple-form-slider-container">
+            <input
+              type="range"
+              name="ambience_rating"
+              id="ambience_rating"
+              min="0"
+              max="5"
+              step="0.1"
+              value="3.0"
+              class="apple-form-slider"
+              oninput="document.getElementById('ambience_rating_value').textContent = this.value"
+            />
+            <span id="ambience_rating_value" class="apple-form-slider-value">3.0</span>
+          </div>
         </div>
 
         <div class="apple-form-actions">
-          <button type="submit" class="apple-button apple-button-primary">Save Profile</button>
+          <button type="submit" class="apple-button apple-button-primary">Submit Review</button>
         </div>
       </form>
     </div>
@@ -188,7 +167,7 @@
     }
     
     .apple-card {
-      max-width: 680px;
+      max-width: 600px;
       width: 100%;
       background: #ffffff;
       border-radius: 18px;
@@ -206,11 +185,22 @@
       border-bottom: 1px solid #d2d2d7;
     }
     
-    .apple-header h1 {
-      font-size: 27px;
-      font-weight: 500;
-      letter-spacing: -0.05em;
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+    
+    .restaurant-logo {
+      height: 50px;
+      width: auto;
+    }
+    
+    .apple-button-secondary {
+      background: #f5f5f7;
       color: #1d1d1f;
+      padding: 6px 12px;
+      font-size: 12px;
+      border-radius: 15px;
     }
     
     .apple-title {
@@ -233,12 +223,7 @@
     .apple-form {
       display: flex;
       flex-direction: column;
-      gap: 16px;
-    }
-    
-    .apple-form-row {
-      display: flex;
-      gap: 16px;
+      gap: 18px;
     }
     
     .apple-form-group {
@@ -252,9 +237,9 @@
     
     .apple-form-label {
       display: block;
-      font-size: 12px;
+      font-size: 14px;
       color: #1d1d1f;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       font-weight: 500;
     }
     
@@ -269,6 +254,11 @@
       transition: all 0.2s ease;
     }
     
+    .apple-form-textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    
     .apple-form-input:focus {
       outline: none;
       border-color: #0071e3;
@@ -279,96 +269,100 @@
       color: #86868b;
     }
     
-    .apple-checkbox-wrapper {
+    /* Radio button styling */
+    .apple-form-radio-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    
+    .apple-radio-label {
       display: flex;
       align-items: center;
-      margin-top: 8px;
-      margin-bottom: 8px;
-    }
-    
-    .apple-checkbox {
-      -webkit-appearance: none;
-      appearance: none;
-      background-color: #fff;
-      margin: 0;
-      width: 16px;
-      height: 16px;
-      border: 1px solid #d2d2d7;
-      border-radius: 4px;
-      display: grid;
-      place-content: center;
       cursor: pointer;
     }
     
-    .apple-checkbox::before {
-      content: "";
-      width: 8px;
-      height: 8px;
-      transform: scale(0);
-      transition: 120ms transform ease-in-out;
-      box-shadow: inset 1em 1em #0071e3;
-      transform-origin: center;
-      clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    .apple-radio-input {
+      width: 18px;
+      height: 18px;
+      margin-right: 8px;
+      accent-color: #0071e3;
     }
     
-    .apple-checkbox:checked::before {
-      transform: scale(1);
-    }
-    
-    .apple-checkbox:focus {
-      outline: none;
-      border-color: #0071e3;
-      box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
-    }
-    
-    .apple-checkbox-label {
+    .apple-radio-text {
       font-size: 14px;
       color: #1d1d1f;
-      margin-left: 8px;
+    }
+    
+    /* Slider styling */
+    .apple-form-slider-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .apple-form-slider {
+      flex: 1;
+      height: 6px;
+      -webkit-appearance: none;
+      background: #d2d2d7;
+      border-radius: 3px;
+      outline: none;
+    }
+    
+    .apple-form-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #0071e3;
       cursor: pointer;
     }
     
-    .apple-checkbox-label a {
-      color: #0071e3;
-      text-decoration: none;
+    .apple-form-slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #0071e3;
+      cursor: pointer;
+      border: none;
     }
     
-    .apple-checkbox-label a:hover {
-      text-decoration: underline;
+    .apple-form-slider-value {
+      font-size: 18px;
+      font-weight: 500;
+      color: #0071e3;
+      min-width: 36px;
+      text-align: center;
     }
     
     .apple-form-actions {
       display: flex;
-      justify-content: flex-end;
-      margin-top: 16px;
+      justify-content: center;
+      margin-top: 24px;
     }
     
     .apple-button {
       display: inline-block;
-      font-size: 14px;
-      font-weight: 400;
+      font-size: 16px;
+      font-weight: 500;
       text-align: center;
       border-radius: 980px;
-      padding: 8px 16px;
+      padding: 10px 24px;
       border: none;
       cursor: pointer;
       transition: all 0.2s ease;
-      min-width: 28px;
-      min-height: 28px;
     }
     
     .apple-button-primary {
       background: #0071e3;
       color: #ffffff;
+      min-width: 160px;
     }
     
     .apple-button-primary:hover {
       background: #0077ED;
-    }
-    
-    .apple-button-secondary {
-      background: #f5f5f7;
-      color: #1d1d1f;
     }
     
     .apple-button-secondary:hover {
@@ -376,24 +370,14 @@
     }
     
     @media (max-width: 768px) {
-      .apple-form-row {
-        flex-direction: column;
-        gap: 16px;
-      }
-      
       .apple-card {
         border-radius: 14px;
         padding: 30px 20px;
       }
       
-      .apple-header {
+      .apple-form-radio-group {
         flex-direction: column;
-        gap: 16px;
-        align-items: flex-start;
-      }
-      
-      .apple-form-actions {
-        justify-content: center;
+        gap: 10px;
       }
     }
   </style>
@@ -409,61 +393,41 @@
           window.location.href = '/';
           return;
         }
-
-        // Populate name fields if available
-        if (Clerk.user.firstName) {
-          document.getElementById('firstname').value = Clerk.user.firstName;
-        }
         
-        if (Clerk.user.lastName) {
-          document.getElementById('lastname').value = Clerk.user.lastName;
-        }
-        
-        // If first and last name aren't available but full name is
-        if (!Clerk.user.firstName && !Clerk.user.lastName && Clerk.user.fullName) {
-          const nameParts = Clerk.user.fullName.split(' ');
-          if (nameParts.length > 0) {
-            document.getElementById('firstname').value = nameParts[0];
-            if (nameParts.length > 1) {
-              document.getElementById('lastname').value = nameParts.slice(1).join(' ');
-            }
-          }
-        }
-        
-        // Set email (read-only)
+        // Store the email from Clerk
         if (Clerk.user.primaryEmailAddress) {
           document.getElementById('email').value = Clerk.user.primaryEmailAddress.emailAddress;
+          console.log("User email set: " + Clerk.user.primaryEmailAddress.emailAddress);
         }
 
         // Handle form submission
         document.getElementById('profile-form').addEventListener('submit', async (e) => {
           e.preventDefault();
           
-          // Check if terms checkbox is checked
-          const termsChecked = document.getElementById('supportCheckbox').checked;
-          if (!termsChecked) {
-            alert('Please agree to the terms and conditions before proceeding.');
-            return;
-          }
-          
           // Get form data
           const formData = new FormData(e.target);
-          const userData = Object.fromEntries(formData.entries());
+          const reviewData = Object.fromEntries(formData.entries());
+          
+          console.log("Review submitted:", reviewData);
           
           try {
             // Here you would send data to your backend
             // For now, just show a success message
-            alert('Profile updated successfully!');
+            alert('Thank you! Your review has been submitted successfully.');
             
             // You could also update some user metadata in Clerk if needed
             // await Clerk.user.update({
-            //   firstName: userData.firstname,
-            //   lastName: userData.lastname,
-            //   // Other fields would need to be stored in metadata
+            //   metadata: {
+            //     lastReview: new Date().toISOString(),
+            //     // Other metadata as needed
+            //   }
             // });
+            
+            // Redirect back to the main page
+            window.location.href = '/';
           } catch (error) {
-            console.error('Error saving profile:', error);
-            alert('There was an error saving your profile. Please try again.');
+            console.error('Error submitting review:', error);
+            alert('There was an error submitting your review. Please try again.');
           }
         });
 
@@ -479,7 +443,7 @@
         
       } catch (error) {
         console.error('Error initializing Clerk:', error);
-        alert('There was an error loading your profile. Please refresh the page or try again later.');
+        alert('There was an error loading the review form. Please refresh the page or try again later.');
       }
     });
   </script>
