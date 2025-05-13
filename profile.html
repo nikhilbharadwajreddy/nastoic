@@ -24,7 +24,8 @@
       </div>
       
       <div class="apple-title">
-        <p style="color: #ff8c00; margin-top: 8px; font-size: 14px;">Your dining experience drives our kitchen: every comment goes straight to the chef and manager, who'll fix any misses or celebrate the highlights.</p>
+        <h2>Complete Your Profile</h2>
+        <p style="color: #ff8c00; margin-top: 8px; font-size: 14px;">Please provide your details before continuing to the review form.</p>
       </div>
 
       <form id="profile-form" class="apple-form">
@@ -408,26 +409,25 @@
           const formData = new FormData(e.target);
           const reviewData = Object.fromEntries(formData.entries());
           
-          console.log("Review submitted:", reviewData);
+          console.log("Profile data submitted:", reviewData);
           
           try {
-            // Here you would send data to your backend
-            // For now, just show a success message
-            alert('Thank you! Your review has been submitted successfully.');
+            // Store user profile data in localStorage for use in review form
+            localStorage.setItem('userProfileData', JSON.stringify(reviewData));
             
             // You could also update some user metadata in Clerk if needed
             // await Clerk.user.update({
             //   metadata: {
-            //     lastReview: new Date().toISOString(),
+            //     profileComplete: true,
             //     // Other metadata as needed
             //   }
             // });
             
-            // Redirect back to the main page
-            window.location.href = '/';
+            // Redirect to the enhanced review form
+            window.location.href = '/enhanced-review-new.html';
           } catch (error) {
-            console.error('Error submitting review:', error);
-            alert('There was an error submitting your review. Please try again.');
+            console.error('Error processing profile:', error);
+            alert('There was an error. Please try again.');
           }
         });
 

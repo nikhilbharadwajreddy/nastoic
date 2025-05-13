@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bawarchi Restaurant — Enhanced Review</title>
+
+  <!-- Load Clerk script from CDN -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+    data-clerk-publishable-key="pk_live_Y2xlcmsubmFzdG9pYy5jb20k"
+    defer
+  ></script>
+</head>
+<body>
+  <div class="container">
+    <div class="review-card">
+      <!-- Header with logo and sign out -->
+      <div class="header">
+        <div class="logo-container">
+          <img src="https://restaurant-review-logos.s3.us-east-1.amazonaws.com/bawarchi.png" alt="Bawarchi Restaurant" class="logo">
+        </div>
+        <button id="sign-out" class="btn-secondary">Sign Out</button>
+      </div>
+      
+      <!-- Progress indicator -->
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress" id="progress-indicator"></div>
+        </div>
+        <div class="steps-counter">
+          <span id="current-step">1</span>/<span id="total-steps">3</span>
+        </div>
+      </div>
+      
+      <!-- Intro section -->
+      <div class="intro-section">
+        <h1>📋 Tell us about your meal</h1>
+        <p class="intro-text">
+          👨‍🍳 Your dining experience drives our kitchen: every comment goes straight to the chef and manager, who'll fix any misses or celebrate the highlights.
+        </p>
+      </div>
+
+      <!-- Multi-step form -->
+      <form id="review-form">
+        <!-- Hidden email field - will be populated from Clerk -->
+        <input type="hidden" name="email" id="email" />
+        
+        <!-- Step 1: What did you eat + Food Rating -->
+        <div class="form-step" id="step-1">
+          <div class="form-group">
+            <label for="food_eaten">What did you eat today?</label>
+            <input 
+              type="text"
+              id="food_eaten"
+              name="food_eaten"
+              placeholder="Enter the dishes you ordered"
+              required
+            />
+          </div>
+          
+          <div class="form-group">
+            <label>How was the food?</label>
+            <div class="rating-container">
+              <div class="stars" id="food-stars">
+                <button type="button" class="star" data-value="1" aria-label="1 star">★</button>
+                <button type="button" class="star" data-value="2" aria-label="2 stars">★</button>
+                <button type="button" class="star" data-value="3" aria-label="3 stars">★</button>
+                <button type="button" class="star" data-value="4" aria-label="4 stars">★</button>
+                <button type="button" class="star" data-value="5" aria-label="5 stars">★</button>
+                <input type="hidden" name="food_rating" id="food_rating" value="0">
+              </div>
+              <div class="rating-label" id="food-rating-label">Tap to rate</div>
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="btn-next" id="to-step-2" disabled>Next →</button>
+          </div>
+        </div>
+        
+        <!-- Step 2: Food Review -->
+        <div class="form-step" id="step-2" style="display: none;">
+          <div class="form-group">
+            <label for="food_review">Tell us more about the food</label>
+            <textarea
+              id="food_review"
+              name="food_review"
+              placeholder="What did you like or dislike about your meal?"
+              rows="4"
+              required
+            ></textarea>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="btn-back" id="back-to-step-1">← Back</button>
+            <button type="button" class="btn-next" id="to-step-3">Next →</button>
+          </div>
+        </div>
+        
+        <!-- Step 3: Ambience -->
+        <div class="form-step" id="step-3" style="display: none;">
+          <div class="form-group">
+            <label>How was the ambience?</label>
+            <div class="rating-container">
+              <div class="stars" id="ambience-stars">
+                <button type="button" class="star" data-value="1" aria-label="1 star">★</button>
+                <button type="button" class="star" data-value="2" aria-label="2 stars">★</button>
+                <button type="button" class="star" data-value="3" aria-label="3 stars">★</button>
+                <button type="button" class="star" data-value="4" aria-label="4 stars">★</button>
+                <button type="button" class="star" data-value="5" aria-label="5 stars">★</button>
+                <input type="hidden" name="ambience_rating" id="ambience_rating" value="0">
+              </div>
+              <div class="rating-label" id="ambience-rating-label">Tap to rate</div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="ambience_review">Any comments about the ambience?</label>
+            <textarea
+              id="ambience_review"
+              name="ambience_review"
+              placeholder="Tell us about your experience with the restaurant atmosphere (optional)"
+              rows="3"
+            ></textarea>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="btn-back" id="back-to-step-2">← Back</button>
+            <button type="submit" class="btn-submit">Submit Review</button>
+          </div>
+        </div>
+      </form>
+      
+      <!-- Thank you modal (hidden by default) -->
+      <div class="modal" id="thank-you-modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="modal-icon">✓</div>
+            <h2>Thanks a ton! 🙌</h2>
+          </div>
+          <div class="modal-body">
+            <p>Your feedback is already with our chefs. We'll read it, we promise!</p>
+            <p class="coupon-code">Here's 5% off your next visit: <strong>THANKYOU5</strong></p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn-primary" id="close-modal">Done</button>
+            <a href="#" class="google-review-link">Leave a Google Review too?</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-message">
+      <p>Good food is made with feedback – thank you! 🍽️❤️</p>
+    </div>
+  </div>
+
+  <style>
+    :root {
+      --brand-orange: #FF8C00;
+      --text-primary: #333333;
+      --text-secondary: #666666;
+      --background-light: #F7F7F7;
+      --background-white: #FFFFFF;
+      --border-light: #E5E5E5;
+      --error: #F44336;
+      --success: #4CAF50;
+      --primary-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --anim-duration: 0.2s;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: var(--primary-font);
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--text-primary);
+      background-color: var(--background-light);
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .review-card {
+      background-color: var(--background-white);
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding: 32px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo {
+      height: 40px;
+      width: auto;
+    }
+    
+    .progress-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .progress-bar {
+      flex: 1;
+      height: 6px;
+      background-color: var(--border-light);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    
+    .progress {
+      height: 100%;
+      background-color: var(--brand-orange);
+      width: 33.33%;
+      transition: width var(--anim-duration) ease-in-out;
+    }
+    
+    .steps-counter {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    
+    .intro-section {
+      margin-bottom: 32px;
+    }
+    
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+    
+    .intro-text {
+      color: var(--brand-orange);
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.4;
+    }
+    
+    .form-step {
+      animation: fadeIn var(--anim-duration) ease-in-out;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+    
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 16px;
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      background-color: var(--background-white);
+      color: var(--text-primary);
+      transition: all var(--anim-duration) ease;
+    }
+    
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--brand-orange);
+      box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2);
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .rating-container {
+      margin-top: 12px;
+    }
+    
+    .stars {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    
+    .star {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 32px;
+      color: #D0D0D0;
+      transition: transform var(--anim-duration) ease, color var(--anim-duration) ease;
+      padding: 0;
+    }
+    
+    .star:hover, 
+    .star.selected {
+      color: var(--brand-orange);
+    }
+    
+    .star.selected {
+      transform: scale(1.1);
+    }
+    
+    .rating-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+      height: 20px;
+    }
+    
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 32px;
+    }
+    
+    .btn-secondary {
+      background-color: var(--background-light);
+      color: var(--text-primary);
+      border: none;
+      border-radius: 50px;
+      padding: 8px 14px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color var(--anim-duration) ease;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #E0E0E0;
+    }
+    
+    .btn-next,
+    .btn-back,
+    .btn-submit,
+    .btn-primary {
+      background-color: var(--brand-orange);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--anim-duration) ease;
+    }
+    
+    .btn-next:hover,
+    .btn-submit:hover,
+    .btn-primary:hover {
+      background-color: #E67500;
+      transform: translateY(-1px);
+    }
+    
+    .btn-next:disabled {
+      background-color: #D0D0D0;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .btn-back {
+      background-color: var(--background-light);
+      color: var(--text-primary);
+    }
+    
+    .btn-back:hover {
+      background-color: #E0E0E0;
+    }
+    
+    .footer-message {
+      text-align: center;
+      margin-top: auto;
+      padding: 16px 0;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    
+    /* Modal styling */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal.visible {
+      display: flex;
+    }
+    
+    .modal-content {
+      background-color: var(--background-white);
+      border-radius: 16px;
+      padding: 32px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .modal-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .modal-icon {
+      font-size: 48px;
+      color: var(--success);
+      margin-bottom: 16px;
+    }
+    
+    .modal-body {
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    
+    .coupon-code {
+      margin-top: 16px;
+      padding: 16px;
+      background-color: #FFF9F0;
+      border-radius: 8px;
+      border: 1px dashed var(--brand-orange);
+      font-size: 14px;
+    }
+    
+    .modal-footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .google-review-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+    }
+    
+    .google-review-link:hover {
+      text-decoration: underline;
+      color: var(--brand-orange);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      .review-card {
+        padding: 24px 20px;
+        border-radius: 12px;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+        gap: 12px;
+      }
+      
+      .btn-back, 
+      .btn-next, 
+      .btn-submit {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .star {
+        font-size: 28px;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+        // DOM elements
+        const form = document.getElementById('review-form');
+        const step1 = document.getElementById('step-1');
+        const step2 = document.getElementById('step-2');
+        const step3 = document.getElementById('step-3');
+        const toStep2Button = document.getElementById('to-step-2');
+        const toStep3Button = document.getElementById('to-step-3');
+        const backToStep1Button = document.getElementById('back-to-step-1');
+        const backToStep2Button = document.getElementById('back-to-step-2');
+        const progress = document.getElementById('progress-indicator');
+        const currentStepEl = document.getElementById('current-step');
+        const foodRatingInput = document.getElementById('food_rating');
+        const ambienceRatingInput = document.getElementById('ambience_rating');
+        const foodRatingLabel = document.getElementById('food-rating-label');
+        const ambienceRatingLabel = document.getElementById('ambience-rating-label');
+        const modal = document.getElementById('thank-you-modal');
+        const closeModalButton = document.getElementById('close-modal');
+        
+        // Rating labels mapping
+        const ratingLabels = {
+          '0': 'Tap to rate',
+          '1': 'Very disappointing',
+          '2': 'Below average',
+          '3': 'Decent',
+          '4': 'Very good',
+          '5': 'Amazing!'
+        };
+        
+        // Handle star rating selection
+        const setupStarRating = (containerId) => {
+          const container = document.getElementById(containerId);
+          const stars = container.querySelectorAll('.star');
+          const type = containerId.split('-')[0]; // 'food' or 'ambience'
+          const input = document.getElementById(`${type}_rating`);
+          
+          stars.forEach(star => {
+            star.addEventListener('click', () => {
+              const value = star.dataset.value;
+              input.value = value;
+              
+              // Update visual state
+              stars.forEach(s => {
+                if (parseInt(s.dataset.value) <= parseInt(value)) {
+                  s.classList.add('selected');
+                } else {
+                  s.classList.remove('selected');
+                }
+              });
+              
+              // Update rating label
+              const label = document.getElementById(`${type}-rating-label`);
+              label.textContent = ratingLabels[value] || ratingLabels['0'];
+              
+              // Enable next button if it's the food rating
+              if (containerId === 'food-stars') {
+                toStep2Button.disabled = false;
+              }
+            });
+          });
+        };
+        
+        // Navigation between steps
+        const goToStep = (step) => {
+          step1.style.display = 'none';
+          step2.style.display = 'none';
+          step3.style.display = 'none';
+          
+          if (step === 1) {
+            step1.style.display = 'block';
+            progress.style.width = '33.33%';
+            currentStepEl.textContent = '1';
+          } else if (step === 2) {
+            step2.style.display = 'block';
+            progress.style.width = '66.66%';
+            currentStepEl.textContent = '2';
+          } else if (step === 3) {
+            step3.style.display = 'block';
+            progress.style.width = '100%';
+            currentStepEl.textContent = '3';
+          }
+        };
+        
+        // Setup event listeners for navigation
+        toStep2Button.addEventListener('click', () => goToStep(2));
+        toStep3Button.addEventListener('click', () => goToStep(3));
+        backToStep1Button.addEventListener('click', () => goToStep(1));
+        backToStep2Button.addEventListener('click', () => goToStep(2));
+        
+        // Setup star ratings
+        setupStarRating('food-stars');
+        setupStarRating('ambience-stars');
+        
+        // Form submission handler
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          
+          // Show the thank you modal
+          modal.classList.add('visible');
+        });
+        
+        // Close modal button
+        closeModalButton.addEventListener('click', () => {
+          modal.classList.remove('visible');
+        });
+        
+        // Basic Clerk integration (optional)
+        if (window.Clerk) {
+          // Initialize Clerk if the script loaded
+          Clerk.load().then(() => {
+            if (Clerk.user && Clerk.user.primaryEmailAddress) {
+              document.getElementById('email').value = Clerk.user.primaryEmailAddress.emailAddress;
+            }
+            
+            // Sign out button
+            const signOutBtn = document.getElementById('sign-out');
+            if (signOutBtn) {
+              signOutBtn.addEventListener('click', () => {
+                Clerk.signOut().then(() => {
+                  window.location.href = '/';
+                });
+              });
+            }
+          }).catch(err => {
+            console.warn('Clerk not initialized, continuing without authentication', err);
+          });
+        }
+        
+      } catch (error) {
+        console.error('Error initializing form:', error);
+        alert('There was an error loading the review form. Please refresh or try again.');
+      }
+    });
+  </script>
+</body>
+</html>
