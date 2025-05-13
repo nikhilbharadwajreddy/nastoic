@@ -347,11 +347,8 @@
             <p class="coupon-code">Here's 5% off your next visit: <strong>THANKYOU5</strong></p>
           </div>
           <div class="modal-footer">
-            <button class="btn-primary" id="close-modal">Done</button>
+            <button class="btn-primary" id="close-modal">Copy Coupon</button>
             <a href="#" class="google-review-link">Leave a Google Review too?</a>
-          </div>
-          <div class="countdown-text" id="countdown-text">
-            This window will close in <span id="countdown">5</span> seconds
           </div>
         </div>
       </div>
@@ -843,7 +840,6 @@
         const ambienceRatingLabel = document.getElementById('ambience-rating-label');
         const modal = document.getElementById('thank-you-modal');
         const closeModalButton = document.getElementById('close-modal');
-        const countdownEl = document.getElementById('countdown');
         
         // Rating labels mapping
         const ratingLabels = {
@@ -959,43 +955,37 @@
             // Continue even if there's an error with the data processing
           }
           
+          // Hide the form steps and show a simplified view
+          document.querySelectorAll('.form-step').forEach(step => {
+            step.style.display = 'none';
+          });
+          document.querySelector('.progress-container').style.display = 'none';
+          document.querySelector('.intro-section').innerHTML = '<h1>Review Submitted! 🎉</h1><p class="intro-text">Thank you for sharing your feedback with us.</p>';
+          
           // Show the thank you modal with coupon
           modal.classList.add('visible');
-          
-          // Start the countdown
-          let countdown = 7; // 7 seconds to make sure user sees the coupon
-          countdownEl.textContent = countdown;
-          
-          const countdownTimer = setInterval(() => {
-            countdown--;
-            countdownEl.textContent = countdown;
-            
-            if (countdown <= 0) {
-              clearInterval(countdownTimer);
-              // Redirect to homepage
-              window.location.href = '/';
-            }
-          }, 1000);
         });
         
-        // Close modal button - copy coupon code and redirect to homepage
+        // Close modal button - copy coupon code
         closeModalButton.addEventListener('click', () => {
           try {
             // Attempt to copy the coupon code to clipboard
             const couponText = document.querySelector('.coupon-code strong').textContent;
             navigator.clipboard.writeText(couponText)
               .then(() => {
-                alert('Coupon code copied to clipboard! Thank you for your review.');
-                // Redirect to home page with success parameter
-                window.location.href = '/?review=success';
+                alert('Coupon code copied to clipboard!');
+                // Just hide the modal
+                modal.classList.remove('visible');
               })
               .catch(() => {
-                // If clipboard API fails, just redirect
-                window.location.href = '/?review=success';
+                // If clipboard API fails, just hide the modal
+                alert('Could not copy coupon automatically. Please copy it manually: ' + couponText);
+                modal.classList.remove('visible');
               });
           } catch (error) {
             // Fallback if any error occurs
-            window.location.href = '/?review=success';
+            alert('Could not copy coupon. Please copy it manually.');
+            modal.classList.remove('visible');
           }
         });
         
